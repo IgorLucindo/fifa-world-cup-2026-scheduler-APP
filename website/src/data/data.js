@@ -6,26 +6,26 @@ export const REGIONS = {
 
 export const CITIES = {
     // Western
-    'Vancouver': { lat: 49.2827, lon: -123.1207, name: 'Vancouver', region: 'Western' },
-    'Seattle': { lat: 47.6062, lon: -122.3321, name: 'Seattle', region: 'Western' },
-    'Santa_Clara': { lat: 37.4030, lon: -121.9698, name: 'San Francisco', region: 'Western' },
-    'Inglewood': { lat: 33.9583, lon: -118.3398, name: 'Los Angeles', region: 'Western' },
+    'Vancouver': { lat: 49.282729, lon: -123.120738, name: 'Vancouver', region: 'Western' },
+    'Seattle': { lat: 47.595152, lon: -122.331639, name: 'Seattle', region: 'Western' },
+    'Santa_Clara': { lat: 37.403000, lon: -121.970000, name: 'San Francisco', region: 'Western' },
+    'Inglewood': { lat: 33.953300, lon: -118.338700, name: 'Los Angeles', region: 'Western' },
     
     // Central
-    'Guadalajara': { lat: 20.6597, lon: -103.3496, name: 'Guadalajara', region: 'Central' },
-    'Mexico_City': { lat: 19.4326, lon: -99.1332, name: 'Mexico City', region: 'Central' },
-    'Monterrey': { lat: 25.6866, lon: -100.3161, name: 'Monterrey', region: 'Central' },
-    'Houston': { lat: 29.7604, lon: -95.3698, name: 'Houston', region: 'Central' },
-    'Arlington': { lat: 32.7357, lon: -97.1081, name: 'Dallas', region: 'Central' },
-    'Kansas_City': { lat: 39.0997, lon: -94.5786, name: 'Kansas City', region: 'Central' },
+    'Guadalajara': { lat: 20.659698, lon: -103.349609, name: 'Guadalajara', region: 'Central' },
+    'Mexico_City': { lat: 19.432608, lon: -99.133209, name: 'Mexico City', region: 'Central' },
+    'Monterrey': { lat: 25.686613, lon: -100.316116, name: 'Monterrey', region: 'Central' },
+    'Houston': { lat: 29.684700, lon: -95.410700, name: 'Houston', region: 'Central' },
+    'Arlington': { lat: 32.747300, lon: -97.094500, name: 'Dallas', region: 'Central' },
+    'Kansas_City': { lat: 39.048900, lon: -94.483900, name: 'Kansas City', region: 'Central' },
     
     // Eastern
-    'Atlanta': { lat: 33.7490, lon: -84.3880, name: 'Atlanta', region: 'Eastern' },
-    'Miami_Gardens': { lat: 25.9580, lon: -80.2389, name: 'Miami', region: 'Eastern' },
-    'Toronto': { lat: 43.6532, lon: -79.3832, name: 'Toronto', region: 'Eastern' },
-    'Foxborough': { lat: 42.0909, lon: -71.2643, name: 'Boston', region: 'Eastern' },
-    'Philadelphia': { lat: 39.9526, lon: -75.1652, name: 'Philadelphia', region: 'Eastern' },
-    'East_Rutherford': { lat: 40.8128, lon: -74.0742, name: 'New York/NJ', region: 'Eastern' },
+    'Atlanta': { lat: 33.755000, lon: -84.401000, name: 'Atlanta', region: 'Eastern' },
+    'Miami_Gardens': { lat: 25.958000, lon: -80.238900, name: 'Miami', region: 'Eastern' },
+    'Toronto': { lat: 43.651070, lon: -79.347015, name: 'Toronto', region: 'Eastern' },
+    'Foxborough': { lat: 42.090900, lon: -71.264300, name: 'Boston', region: 'Eastern' },
+    'Philadelphia': { lat: 39.900800, lon: -75.167500, name: 'Philadelphia', region: 'Eastern' },
+    'East_Rutherford': { lat: 40.813600, lon: -74.074500, name: 'New York/NJ', region: 'Eastern' },
 };
 
 export const DATES = [

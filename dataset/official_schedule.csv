@@ -1,17 +1,17 @@
 City,2026-06-11,2026-06-12,2026-06-13,2026-06-14,2026-06-15,2026-06-16,2026-06-17,2026-06-18,2026-06-19,2026-06-20,2026-06-21,2026-06-22,2026-06-23,2026-06-24,2026-06-25,2026-06-26,2026-06-27
-Vancouver,,,m6 (D2): TBD vs TBD,,,,,m27 (B3): Can vs TBD,,,m40 (G4): TBD vs TBD,,,m51 (B1): Can vs TBD,,m64 (G2): TBD vs TBD,
-Seattle,,,,,m16 (G3): TBD vs TBD,,,,m32 (D2): USA vs TBD,,,,,m52 (B2): TBD vs TBD,,m63 (G1): TBD vs TBD,
-Santa_Clara,,,m8 (B4): TBD vs TBD,,,m20 (J4): TBD vs TBD,,,m31 (D3): TBD vs TBD,,,m44 (J4): TBD vs TBD,,,m60 (D4): TBD vs TBD,,
-Inglewood,,m4 (D1): USA vs TBD,,,m15 (G1): TBD vs TBD,,,m26 (B2): TBD vs TBD,,,m39 (G2): TBD vs TBD,,,,m59 (D3): USA vs TBD,,
-Guadalajara,m2 (A2): TBD vs TBD,,,,,,,m28 (A2): Mex vs TBD,,,,,m48 (K4): TBD vs TBD,,,m66 (H4): TBD vs TBD,
-Mexico_City,m1 (A1): Mex vs TBD,,,,,,m24 (K2): Mex vs TBD,,,,,,,m53 (A3): Mex vs TBD,,,
-Monterrey,,,,m12 (F3): TBD vs TBD,,,,,,m36 (F2): TBD vs TBD,,,,m54 (A4): TBD vs TBD,,,
-Houston,,,,m10 (E3): TBD vs TBD,,,m23 (K1): TBD vs TBD,,,m35 (F1): TBD vs TBD,,,m47 (K3): TBD vs TBD,,,m65 (H3): TBD vs TBD,
-Arlington,,,,m11 (F1): TBD vs TBD,,,m22 (L2): TBD vs TBD,,,,,m43 (J1): TBD vs TBD,,,m57 (F3): TBD vs TBD,,m70 (J2): TBD vs TBD
-Kansas_City,,,,,,m19 (J1): TBD vs TBD,,,,m34 (E2): TBD vs TBD,,,,,m58 (F4): TBD vs TBD,,m69 (J1): TBD vs TBD
-Atlanta,,,,,m14 (H3): TBD vs TBD,,,m25 (A1): TBD vs TBD,,,m38 (H2): TBD vs TBD,,,m50 (C4): TBD vs TBD,,,m72 (K4): TBD vs TBD
-Miami_Gardens,,,,,m13 (H1): TBD vs TBD,,,,,,m37 (H1): TBD vs TBD,,,m49 (C3): TBD vs TBD,,,m71 (K3): TBD vs TBD
-Toronto,,m3 (B1): Can vs TBD,,,,,m21 (L1): TBD vs TBD,,,m33 (E1): TBD vs TBD,,,m46 (L2): TBD vs TBD,,,m62 (I2): TBD vs TBD,
-Foxborough,,,m5 (C1): TBD vs TBD,,,m18 (I2): TBD vs TBD,,,m30 (C2): TBD vs TBD,,,,m45 (L1): TBD vs TBD,,,m61 (I1): TBD vs TBD,
-Philadelphia,,,,m9 (E1): TBD vs TBD,,,,,m29 (C1): TBD vs TBD,,,m42 (I2): TBD vs TBD,,,m55 (E1): TBD vs TBD,,m68 (L2): TBD vs TBD
-East_Rutherford,,,m7 (C3): TBD vs TBD,,,m17 (I1): TBD vs TBD,,,,,,m41 (I1): TBD vs TBD,,,m56 (E2): TBD vs TBD,,m67 (L1): TBD vs TBD
+Vancouver,,,m6 (D): D3 vs D4,,,,,m27 (B): CAN vs B3,,,m40 (G): BEL vs G3,,,m51 (B): B4 vs CAN,,m64 (G): G2 vs G3,
+Seattle,,,,,m16 (G): G3 vs G4,,,,m32 (D): USA vs D3,,,,,m52 (B): B2 vs B3,,m63 (G): G4 vs BEL,
+Santa_Clara,,,m8 (B): B3 vs B4,,,m20 (J): J3 vs J4,,,m31 (D): D4 vs D2,,,m44 (J): J4 vs J2,,,m60 (D): D2 vs D3,,
+Inglewood,,m4 (D): USA vs D2,,,m15 (G): BEL vs G2,,,m26 (B): B4 vs B2,,,m39 (G): G4 vs G2,,,,m59 (D): D4 vs USA,,
+Guadalajara,m2 (A): A3 vs A4,,,,,,,m28 (A): MEX vs A3,,,,,m48 (K): K4 vs K2,,,m66 (H): H2 vs H3,
+Mexico_City,m1 (A): MEX vs A2,,,,,,m24 (K): K3 vs K4,,,,,,,m53 (A): A4 vs MEX,,,
+Monterrey,,,,m12 (F): F3 vs F4,,,,,,m36 (F): F4 vs F2,,,,m54 (A): A2 vs A3,,,
+Houston,,,,m10 (E): E3 vs E4,,,m23 (K): POR vs K2,,,m35 (F): NED vs F3,,,m47 (K): POR vs K3,,,m65 (H): H4 vs ESP,
+Arlington,,,,m11 (F): NED vs F2,,,m22 (L): L3 vs L4,,,,,m43 (J): ARG vs J3,,,m57 (F): F4 vs NED,,m70 (J): J2 vs J3
+Kansas_City,,,,,,m19 (J): ARG vs J2,,,,m34 (E): E4 vs E2,,,,,m58 (F): F2 vs F3,,m69 (J): J4 vs ARG
+Atlanta,,,,,m14 (H): H3 vs H4,,,m25 (A): A4 vs A2,,,m38 (H): H4 vs H2,,,m50 (C): C2 vs C3,,,m72 (K): K2 vs K3
+Miami_Gardens,,,,,m13 (H): ESP vs H2,,,,,,m37 (H): ESP vs H3,,,m49 (C): C4 vs BRA,,,m71 (K): K4 vs POR
+Toronto,,m3 (B): CAN vs B2,,,,,m21 (L): ENG vs L2,,,m33 (E): GER vs E3,,,m46 (L): L4 vs L2,,,m62 (I): I2 vs I3,
+Foxborough,,,m5 (C): BRA vs C2,,,m18 (I): I3 vs I4,,,m30 (C): C4 vs C2,,,,m45 (L): ENG vs L3,,,m61 (I): I4 vs FRA,
+Philadelphia,,,,m9 (E): GER vs E2,,,,,m29 (C): BRA vs C3,,,m42 (I): I4 vs I2,,,m55 (E): E4 vs GER,,m68 (L): L2 vs L3
+East_Rutherford,,,m7 (C): C3 vs C4,,,m17 (I): FRA vs I2,,,,,,m41 (I): FRA vs I3,,,m56 (E): E2 vs E3,,m67 (L): L4 vs ENG
