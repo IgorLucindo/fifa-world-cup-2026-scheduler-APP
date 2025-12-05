@@ -1,3 +1,4 @@
 - let the user choose the distance measure of km or miles
 - correct distance comparison (comparison with optimal instead with official)
 - correct distance calculation
+- checks constraints, when trying to build own schedule
