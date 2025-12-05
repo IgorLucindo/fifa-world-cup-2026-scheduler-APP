@@ -4,9 +4,9 @@ export class SchedulerApp {
     constructor() {
         this.officialData = [];
         this.optimalData = [];
-        this.scheduleData = [];
-        this.customData = null; // Add storage for custom schedule
-
+        this.scheduleData = []; 
+        this.customData = null;
+        
         this.currentMode = 'optimal';
         this.currentUnit = this.getPreferredUnit(); 
         this.baselineDist = 0;
@@ -15,9 +15,7 @@ export class SchedulerApp {
         this.init();
     }
 
-    // NEW: Helper to determine default unit
     getPreferredUnit() {
-        // Default to KM, but check for US/UK locales which typically use Miles
         const lang = navigator.language || 'en-US';
         if (lang.startsWith('en-US') || lang.startsWith('en-GB')) {
             return 'mi';
@@ -28,6 +26,7 @@ export class SchedulerApp {
     async init() {
         this.renderGridStructure();
         this.renderLegend();
+        this.injectToastContainer(); // NEW: Prepare UI for errors
         
         const distEl = document.getElementById('total-dist');
         if (distEl) distEl.innerText = 'Loading...';
@@ -40,9 +39,6 @@ export class SchedulerApp {
 
             this.officialData = official;
             this.optimalData = optimal;
-
-            console.log("Loaded Official Data:", this.officialData.length, "matches");
-            console.log("Loaded Optimal Data:", this.optimalData.length, "matches");
 
             // Baseline: Use Optimal (MIP)
             this.baselineDist = this.calculateTotalDistance(this.optimalData);
@@ -58,6 +54,30 @@ export class SchedulerApp {
         
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
+        }
+    }
+
+    // NEW: Inject Toast Container
+    injectToastContainer() {
+        if (!document.getElementById('toast-error')) {
+            const toast = document.createElement('div');
+            toast.id = 'toast-error';
+            toast.className = 'toast-error';
+            toast.innerHTML = '<span>Constraint Violation</span>';
+            document.body.appendChild(toast);
+        }
+    }
+
+    // NEW: Show Error Toast
+    showError(message) {
+        const toast = document.getElementById('toast-error');
+        if (toast) {
+            toast.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                <span>${message}</span>
+            `;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
     }
 
@@ -101,7 +121,6 @@ export class SchedulerApp {
         return matches;
     }
 
-    // Calculates raw distance in KM
     calculateDistance(city1, city2) {
         if (!CITIES[city1] || !CITIES[city2]) return 0;
         if (city1 === city2) return 0;
@@ -134,16 +153,9 @@ export class SchedulerApp {
 
     setMode(mode) {
         this.currentMode = mode;
-        
-        // Restore data based on mode
-        if (mode === 'official') {
-            this.scheduleData = JSON.parse(JSON.stringify(this.officialData));
-        } else if (mode === 'optimal') {
-            this.scheduleData = JSON.parse(JSON.stringify(this.optimalData));
-        } else if (mode === 'custom' && this.customData) {
-            // Restore the saved custom data
-            this.scheduleData = JSON.parse(JSON.stringify(this.customData));
-        }
+        if (mode === 'official') this.scheduleData = JSON.parse(JSON.stringify(this.officialData));
+        if (mode === 'optimal') this.scheduleData = JSON.parse(JSON.stringify(this.optimalData));
+        if (mode === 'custom' && this.customData) this.scheduleData = JSON.parse(JSON.stringify(this.customData));
         
         this.updateUI();
     }
@@ -159,30 +171,21 @@ export class SchedulerApp {
         const btnCustom = document.getElementById('btn-custom');
         const btnUnit = document.getElementById('btn-unit');
 
-        // Update Unit Button Text
         if (btnUnit) btnUnit.innerText = `UNIT: ${this.currentUnit.toUpperCase()}`;
 
-        // Define Styles
         const inactiveClass = "text-slate-400 hover:text-white bg-transparent shadow-none cursor-pointer";
         const activeOfficial = "bg-slate-600 text-white shadow-sm";
         const activeOptimal = "bg-emerald-600 text-white shadow-sm";
         const activeCustom = "bg-amber-600 text-white shadow-sm";
 
-        // Button States
         if (btnOfficial) btnOfficial.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${this.currentMode === 'official' ? activeOfficial : inactiveClass}`;
         if (btnOptimal) btnOptimal.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${this.currentMode === 'optimal' ? activeOptimal : inactiveClass}`;
         
-        // Custom Button Logic: Show if we are in custom mode OR if we have history
         if (btnCustom) {
             if (this.currentMode === 'custom' || this.customData) {
                 btnCustom.classList.remove('hidden');
-                
-                // Toggle active/inactive style for Custom button
-                const customStyle = this.currentMode === 'custom' ? activeCustom : inactiveClass;
-                btnCustom.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${customStyle} ml-2`;
-                
-                // Optional: Remove pulse animation once it becomes a permanent tab
-                btnCustom.classList.remove('animate-pulse'); 
+                btnCustom.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ml-2 ${this.currentMode === 'custom' ? activeCustom : inactiveClass}`;
+                btnCustom.classList.remove('animate-pulse');
             } else {
                 btnCustom.classList.add('hidden');
             }
@@ -190,7 +193,6 @@ export class SchedulerApp {
 
         this.renderGridMatches();
         
-        // --- METRICS UPDATE ---
         const factor = this.currentUnit === 'mi' ? 0.621371 : 1;
         const currentDistKm = this.calculateTotalDistance(this.scheduleData);
         const currentDistDisplay = Math.round(currentDistKm * factor);
@@ -223,111 +225,43 @@ export class SchedulerApp {
     }
 
     renderGridStructure() {
+        // ... (Keep existing implementation) ...
         const header = document.getElementById('grid-header');
         const body = document.getElementById('grid-body');
-        
         if (!header || !body) return;
-
-        // GRID DEFINITION
         const colString = `40px 130px repeat(${DATES.length}, minmax(60px, 1fr))`;
-        
-        // --- HEADER ---
         header.style.gridTemplateColumns = colString;
-        
-        let headerHtml = `
-            <div class="sticky left-0 z-30 bg-gray-50 p-2 border-r border-gray-200 flex items-center justify-center shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
-                <span class="text-[10px] font-bold text-slate-500 -rotate-90">REGION</span>
-            </div>
-            <div class="sticky left-[40px] z-30 bg-gray-50 p-2 border-r border-gray-200 flex items-center justify-center shadow-[4px_0_10px_-5px_rgba(0,0,0,0.1)]">
-                <span class="text-xs font-bold text-gray-400">VENUE</span>
-            </div>
-        `;
-
+        let headerHtml = `<div class="sticky left-0 z-30 bg-gray-50 p-2 border-r border-gray-200 flex items-center justify-center shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]"><span class="text-[10px] font-bold text-slate-500 -rotate-90">REGION</span></div><div class="sticky left-[40px] z-30 bg-gray-50 p-2 border-r border-gray-200 flex items-center justify-center shadow-[4px_0_10px_-5px_rgba(0,0,0,0.1)]"><span class="text-xs font-bold text-gray-400">VENUE</span></div>`;
         DATES.forEach(dateStr => {
             const day = dateStr.split('-')[2];
             const dateObj = new Date(parseInt(dateStr.split('-')[0]), parseInt(dateStr.split('-')[1])-1, parseInt(day));
             const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
-            
-            headerHtml += `
-                <div class="p-2 border-r border-gray-200 text-center overflow-hidden">
-                    <div class="text-xs font-bold text-slate-500 uppercase">${dayName}</div>
-                    <div class="text-lg font-bold text-slate-800">${day}</div>
-                </div>
-            `;
+            headerHtml += `<div class="p-2 border-r border-gray-200 text-center overflow-hidden"><div class="text-xs font-bold text-slate-500 uppercase">${dayName}</div><div class="text-lg font-bold text-slate-800">${day}</div></div>`;
         });
         header.innerHTML = headerHtml;
-
-        // --- BODY ---
         body.className = "grid relative";
         body.style.gridTemplateColumns = colString;
-
         const regionCounts = {};
-        Object.values(CITIES).forEach(c => {
-            regionCounts[c.region] = (regionCounts[c.region] || 0) + 1;
-        });
-
+        Object.values(CITIES).forEach(c => { regionCounts[c.region] = (regionCounts[c.region] || 0) + 1; });
         const processedRegions = new Set();
         let bodyHtml = '';
-
         Object.keys(CITIES).forEach(cityKey => {
             const cityData = CITIES[cityKey];
             const regionData = REGIONS[cityData.region];
-            const stadiumNames = {
-                'Foxborough': 'Gillette Stadium',
-                'East_Rutherford': 'MetLife Stadium',
-                'Arlington': 'AT&T Stadium',
-                'Mexico_City': 'Estadio Azteca'
-            };
-            const subText = stadiumNames[cityKey] || 'Stadium';
-
-            // 1. Region Cell (Merged)
             if (!processedRegions.has(cityData.region)) {
                 const span = regionCounts[cityData.region];
-                bodyHtml += `
-                    <div class="sticky left-0 z-20 border-r border-white/20 border-b border-gray-100 flex items-center justify-center shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]" 
-                         style="grid-row: span ${span}; background-color: ${regionData.color}">
-                        <span class="text-xs font-bold text-slate-800 uppercase tracking-widest whitespace-nowrap -rotate-90 transform">
-                            ${regionData.label.split(' ')[0]}
-                        </span>
-                    </div>
-                `;
+                bodyHtml += `<div class="sticky left-0 z-20 border-r border-white/20 border-b border-gray-100 flex items-center justify-center shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]" style="grid-row: span ${span}; background-color: ${regionData.color}"><span class="text-xs font-bold text-slate-800 uppercase tracking-widest whitespace-nowrap -rotate-90 transform">${regionData.label.split(' ')[0]}</span></div>`;
                 processedRegions.add(cityData.region);
             }
-
-            // 2. City Cell
-            bodyHtml += `
-                <div class="sticky left-[40px] z-20 p-2 border-r border-white/20 border-b border-gray-100 flex flex-col justify-center shadow-[4px_0_10px_-5px_rgba(0,0,0,0.1)]"
-                     style="background-color: ${regionData.color}">
-                    <div class="font-bold text-slate-900 text-sm leading-tight truncate" title="${cityData.name}">
-                        ${cityData.name}
-                    </div>
-                    <span class="text-[9px] text-slate-800/60 font-medium mt-0.5 truncate">${subText}</span>
-                </div>
-            `;
-
-            // 3. Date Cells
+            bodyHtml += `<div class="sticky left-[40px] z-20 p-2 border-r border-white/20 border-b border-gray-100 flex flex-col justify-center shadow-[4px_0_10px_-5px_rgba(0,0,0,0.1)]" style="background-color: ${regionData.color}"><div class="font-bold text-slate-900 text-sm leading-tight truncate" title="${cityData.name}">${cityData.name}</div><span class="text-[9px] text-slate-800/60 font-medium mt-0.5 truncate">${cityKey}</span></div>`;
             DATES.forEach(date => {
-                bodyHtml += `
-                    <div id="cell-${cityKey.replace(/ /g, '_')}-${date}" 
-                         class="relative border-r border-gray-100 border-b border-gray-100 min-h-[80px] bg-white transition-all duration-200 drop-zone" 
-                         data-city="${cityKey}" 
-                         data-date="${date}">
-                    </div>
-                `;
+                bodyHtml += `<div id="cell-${cityKey.replace(/ /g, '_')}-${date}" class="relative border-r border-gray-100 border-b border-gray-100 min-h-[80px] bg-white transition-all duration-200 drop-zone" data-city="${cityKey}" data-date="${date}"></div>`;
             });
         });
-
         body.innerHTML = bodyHtml;
-        
-        // Attach Drop Listeners
         document.querySelectorAll('.drop-zone').forEach(zone => {
-            zone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                zone.classList.add('drag-over');
-            });
-            zone.addEventListener('dragleave', (e) => {
-                zone.classList.remove('drag-over');
-            });
+            zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+            zone.addEventListener('dragleave', (e) => { zone.classList.remove('drag-over'); });
             zone.addEventListener('drop', (e) => this.handleDrop(e));
         });
     }
@@ -340,6 +274,7 @@ export class SchedulerApp {
             const cell = document.getElementById(cellId);
             if (cell) {
                 const div = document.createElement('div');
+                div.id = `match-${match.id}`; // NEW: Add ID for DOM selection
                 div.className = `absolute inset-0.5 rounded-sm shadow-sm border border-black/10 cursor-move flex flex-col items-center justify-center p-0.5 hover:scale-105 hover:shadow-md hover:z-50 transition-transform ${GROUPS[match.group] || 'bg-gray-500 text-white'}`;
                 div.draggable = true;
                 div.innerHTML = `
@@ -365,6 +300,61 @@ export class SchedulerApp {
         });
     }
 
+    // NEW: Validation Logic
+    validateConstraints(tempSchedule, changedMatches) {
+        // Helper: Date Difference in Days
+        const getDayDiff = (d1, d2) => {
+            const date1 = new Date(d1);
+            const date2 = new Date(d2);
+            return Math.abs((date2 - date1) / (1000 * 60 * 60 * 24));
+        };
+
+        for (const m of changedMatches) {
+            // 1. Stadium Turnaround: No matches on consecutive days in same city
+            // Find all matches in this city
+            const cityMatches = tempSchedule.filter(x => x.city === m.city).sort((a, b) => new Date(a.date) - new Date(b.date));
+            const mIndex = cityMatches.findIndex(x => x.id === m.id);
+            
+            // Check Previous
+            if (mIndex > 0) {
+                const prev = cityMatches[mIndex - 1];
+                if (getDayDiff(m.date, prev.date) < 2) {
+                    return `Stadium ${m.city} needs a rest day after ${prev.date}.`;
+                }
+            }
+            // Check Next
+            if (mIndex < cityMatches.length - 1) {
+                const next = cityMatches[mIndex + 1];
+                if (getDayDiff(m.date, next.date) < 2) {
+                    return `Stadium ${m.city} needs a rest day before ${next.date}.`;
+                }
+            }
+
+            // 2. Team Rest: Teams need at least 3 full rest days (Diff >= 4)
+            for (const team of [m.t1, m.t2]) {
+                const teamMatches = tempSchedule
+                    .filter(x => x.t1 === team || x.t2 === team)
+                    .sort((a, b) => new Date(a.date) - new Date(b.date));
+                
+                const tIndex = teamMatches.findIndex(x => x.id === m.id);
+                
+                if (tIndex > 0) {
+                    const prev = teamMatches[tIndex - 1];
+                    if (getDayDiff(m.date, prev.date) < 4) {
+                        return `${team} plays too soon after ${prev.date} (Min 3 rest days).`;
+                    }
+                }
+                if (tIndex < teamMatches.length - 1) {
+                    const next = teamMatches[tIndex + 1];
+                    if (getDayDiff(m.date, next.date) < 4) {
+                        return `${team} plays too soon before ${next.date} (Min 3 rest days).`;
+                    }
+                }
+            }
+        }
+        return null; // Valid
+    }
+
     handleDrop(e) {
         e.preventDefault();
         const zone = e.currentTarget;
@@ -375,37 +365,59 @@ export class SchedulerApp {
         const newCity = zone.dataset.city;
         const newDate = zone.dataset.date;
 
-        const otherMatchIndex = this.scheduleData.findIndex(m => m.city === newCity && m.date === newDate && m.id !== this.draggedMatch.id);
-        const selfIndex = this.scheduleData.findIndex(m => m.id === this.draggedMatch.id);
-        
+        // Create a deep copy to simulate the move
+        const tempSchedule = JSON.parse(JSON.stringify(this.scheduleData));
+        const changedMatches = [];
+
+        // Find matches in the copy
+        const selfIndex = tempSchedule.findIndex(m => m.id === this.draggedMatch.id);
+        const otherMatchIndex = tempSchedule.findIndex(m => m.city === newCity && m.date === newDate && m.id !== this.draggedMatch.id);
+
+        if (selfIndex === -1) return;
+
+        // Apply Move/Swap
         if (otherMatchIndex !== -1) {
-            this.scheduleData[otherMatchIndex].city = this.draggedMatch.city;
-            this.scheduleData[otherMatchIndex].date = this.draggedMatch.date;
+            // Swap
+            tempSchedule[otherMatchIndex].city = this.draggedMatch.city;
+            tempSchedule[otherMatchIndex].date = this.draggedMatch.date;
+            changedMatches.push(tempSchedule[otherMatchIndex]);
         }
 
-        this.scheduleData[selfIndex].city = newCity;
-        this.scheduleData[selfIndex].date = newDate;
+        tempSchedule[selfIndex].city = newCity;
+        tempSchedule[selfIndex].date = newDate;
+        changedMatches.push(tempSchedule[selfIndex]);
 
-        // NEW: Save state to customData
-        this.customData = JSON.parse(JSON.stringify(this.scheduleData)); //
+        // Validate
+        const errorMsg = this.validateConstraints(tempSchedule, changedMatches);
 
+        if (errorMsg) {
+            this.showError(errorMsg);
+            
+            // Visual Feedback: Shake the original element
+            // We use the ID to find the element currently in the DOM (which is still at the old position)
+            const el = document.getElementById(`match-${this.draggedMatch.id}`);
+            if (el) {
+                el.classList.add('shake-invalid');
+                setTimeout(() => el.classList.remove('shake-invalid'), 500);
+            }
+            return; // Reject the move
+        }
+
+        // Commit Changes
+        this.scheduleData = tempSchedule;
+        this.customData = JSON.parse(JSON.stringify(this.scheduleData));
         this.currentMode = 'custom';
         this.updateUI();
     }
 
     renderLegend() {
+        // ... (Keep existing implementation) ...
         const legend = document.getElementById('legend');
         if (!legend) return;
-
         let html = '<span class="font-bold text-gray-700">LEGEND:</span>';
         Object.keys(GROUPS).forEach(g => {
             const colorClass = GROUPS[g].split(' ')[0];
-            html += `
-                <div class="flex items-center gap-1">
-                    <div class="w-3 h-3 rounded-sm ${colorClass}"></div>
-                    <span>Grp ${g}</span>
-                </div>
-            `;
+            html += `<div class="flex items-center gap-1"><div class="w-3 h-3 rounded-sm ${colorClass}"></div><span>Grp ${g}</span></div>`;
         });
         legend.innerHTML = html;
     }
