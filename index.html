@@ -4,31 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FIFA World Cup 2026 Scheduler</title>
+    <link rel="icon" href="website/assets/images/trophy.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="website/css/styles.css">
 </head>
 
 <body class="bg-gray-50 text-slate-800 font-sans h-screen flex flex-col overflow-hidden">
-    <!-- HEADER -->
     <header class="flex-none bg-slate-900 text-white p-4 shadow-lg z-30">
         <div class="flex items-center justify-between max-w-7xl mx-auto">
             <div class="flex items-center gap-3">
-                <i data-lucide="trophy" class="w-8 h-8 text-yellow-400"></i>
+                <img src="website/assets/images/trophy.svg" class="w-8 h-8" alt="Trophy Icon">
                 <div>
                     <h1 class="text-xl font-bold tracking-tight">FIFA World Cup 2026 <span class="text-yellow-400 font-light">Scheduler</span></h1>
                     <p class="text-xs text-slate-400">Research Paper Optimization Demo</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-6">
-                <!-- METRICS HUD -->
+            <div class="flex items-center gap-4">
                 <div class="flex items-center gap-6 bg-slate-800 rounded-lg px-4 py-2 border border-slate-700">
                     <div class="flex flex-col items-end">
                         <span class="text-[10px] uppercase tracking-wider text-slate-400">Total Travel</span>
                         <div class="flex items-baseline gap-1">
                             <span id="total-dist" class="text-2xl font-mono font-bold text-white">0</span>
-                            <span class="text-xs text-slate-400">km</span>
+                            <span id="dist-unit" class="text-xs text-slate-400">km</span>
                         </div>
                     </div>
 
@@ -38,20 +37,23 @@
                         <span class="text-[10px] uppercase tracking-wider text-slate-400">Efficiency</span>
                         <div id="efficiency-container" class="flex items-baseline gap-1 font-mono font-bold text-slate-400">
                             <span id="eff-val">0</span>
-                            <span class="text-xs font-sans font-normal text-slate-400">vs Official</span>
+                            <span class="text-xs font-sans font-normal text-slate-400">vs MIP</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- CONTROLS -->
-                <div class="flex bg-slate-800 rounded-lg p-1 border border-slate-700">
+                <button id="btn-unit" class="h-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all flex items-center">
+                    UNIT: KM
+                </button>
+
+                <div class="flex bg-slate-800 rounded-lg p-1 border border-slate-700 items-center">
                     <button onclick="app.setMode('official')" id="btn-official" class="px-3 py-1.5 rounded-md text-sm font-medium transition-all text-slate-400 hover:text-white">
                         Official Schedule
                     </button>
                     <button onclick="app.setMode('optimal')" id="btn-optimal" class="px-3 py-1.5 rounded-md text-sm font-medium transition-all bg-emerald-600 text-white shadow-sm">
                         MIP Schedule
                     </button>
-                    <div id="btn-custom" class="hidden px-3 py-1.5 rounded-md text-sm font-medium bg-amber-600 text-white shadow-sm animate-pulse">
+                    <div id="btn-custom" class="hidden px-3 py-1.5 rounded-md text-sm font-medium bg-amber-600 text-white shadow-sm animate-pulse ml-2">
                         Custom Schedule
                     </div>
                 </div>
@@ -59,29 +61,22 @@
         </div>
     </header>
 
-    <!-- MAIN GRID CONTAINER -->
     <div class="flex-1 overflow-auto bg-gray-100 p-6" id="main-container">
         <div class="max-w-[1800px] mx-auto bg-white shadow-xl rounded-xl overflow-hidden border border-gray-200">
             
-            <!-- Grid Header (Dates) -->
             <div id="grid-header" class="grid border-b border-gray-200 bg-gray-50 sticky top-0 z-20">
-                <!-- Injected via JS -->
-            </div>
+                </div>
 
-            <!-- Grid Body (Cities & Cells) -->
             <div id="grid-body" class="relative">
-                <!-- Injected via JS -->
-            </div>
+                </div>
 
         </div>
     </div>
 
-    <!-- FOOTER -->
     <footer class="bg-white border-t border-gray-200 p-4 flex justify-between items-center text-xs text-gray-500 flex-none z-30">
         <div id="legend" class="flex gap-4 items-center">
             <span class="font-bold text-gray-700">LEGEND:</span>
-            <!-- Legend items injected via JS -->
-        </div>
+            </div>
         
         <div class="flex items-center gap-2">
             <i data-lucide="info" class="w-4 h-4"></i>
@@ -89,7 +84,6 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
     <script type="module" src="website/src/index.js"></script>
 </body>
 </html>

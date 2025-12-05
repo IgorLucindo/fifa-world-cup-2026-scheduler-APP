@@ -1,4 +1,4 @@
-- let the user choose the distance measure of km or miles
-- correct distance comparison (comparison with optimal instead with official)
-- correct distance calculation
 - checks constraints, when trying to build own schedule
+- have link to fifa's website
+- fix group colors
+- make the website more sugestive to what it is about and what we can do in it

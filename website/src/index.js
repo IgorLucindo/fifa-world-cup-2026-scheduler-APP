@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Attach Event Listeners to Buttons
     const btnOfficial = document.getElementById('btn-official');
     const btnOptimal = document.getElementById('btn-optimal');
+    const btnUnit = document.getElementById('btn-unit');
 
     if (btnOfficial) {
         btnOfficial.addEventListener('click', () => {
@@ -21,6 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnOptimal) {
         btnOptimal.addEventListener('click', () => {
             app.setMode('optimal');
+        });
+    }
+
+    if (btnUnit) {
+        btnUnit.addEventListener('click', () => {
+            app.toggleUnit();
         });
     }
 });
