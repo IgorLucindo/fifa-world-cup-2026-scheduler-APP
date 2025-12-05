@@ -35,16 +35,16 @@ export const DATES = [
 ];
 
 export const GROUPS = {
-    'A': 'bg-[#98cca5] text-black',
-    'B': 'bg-[#cf2e2e] text-white',
+    'A': 'bg-[#9cd267] text-black',
+    'B': 'bg-[#f32e2e] text-white',
     'C': 'bg-[#fced84] text-black',
-    'D': 'bg-[#005a9c] text-white',
+    'D': 'bg-[#006ebd] text-white',
     'E': 'bg-[#f47920] text-white',
-    'F': 'bg-[#006747] text-white',
-    'G': 'bg-[#b6badd] text-black',
+    'F': 'bg-[#007751] text-white',
+    'G': 'bg-[#c0c4e7] text-black',
     'H': 'bg-[#6cc2bd] text-black',
     'I': 'bg-[#483a8b] text-white',
-    'J': 'bg-[#f4aeba] text-black',
-    'K': 'bg-[#d60c8b] text-white',
+    'J': 'bg-[#ffb4b9] text-black',
+    'K': 'bg-[#f93591] text-white',
     'L': 'bg-[#8a1538] text-white',
 };

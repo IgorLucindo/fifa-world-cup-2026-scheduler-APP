@@ -4,10 +4,10 @@ export class SchedulerApp {
     constructor() {
         this.officialData = [];
         this.optimalData = [];
-        this.scheduleData = []; 
-        
+        this.scheduleData = [];
+        this.customData = null; // Add storage for custom schedule
+
         this.currentMode = 'optimal';
-        // CHANGED: Detect unit based on user locale
         this.currentUnit = this.getPreferredUnit(); 
         this.baselineDist = 0;
         this.draggedMatch = null;
@@ -134,8 +134,17 @@ export class SchedulerApp {
 
     setMode(mode) {
         this.currentMode = mode;
-        if (mode === 'official') this.scheduleData = JSON.parse(JSON.stringify(this.officialData));
-        if (mode === 'optimal') this.scheduleData = JSON.parse(JSON.stringify(this.optimalData));
+        
+        // Restore data based on mode
+        if (mode === 'official') {
+            this.scheduleData = JSON.parse(JSON.stringify(this.officialData));
+        } else if (mode === 'optimal') {
+            this.scheduleData = JSON.parse(JSON.stringify(this.optimalData));
+        } else if (mode === 'custom' && this.customData) {
+            // Restore the saved custom data
+            this.scheduleData = JSON.parse(JSON.stringify(this.customData));
+        }
+        
         this.updateUI();
     }
 
@@ -148,41 +157,45 @@ export class SchedulerApp {
         const btnOfficial = document.getElementById('btn-official');
         const btnOptimal = document.getElementById('btn-optimal');
         const btnCustom = document.getElementById('btn-custom');
-        
-        // Update Unit Button Text
         const btnUnit = document.getElementById('btn-unit');
+
+        // Update Unit Button Text
         if (btnUnit) btnUnit.innerText = `UNIT: ${this.currentUnit.toUpperCase()}`;
 
-        const inactiveClass = "text-slate-400 hover:text-white bg-transparent shadow-none";
+        // Define Styles
+        const inactiveClass = "text-slate-400 hover:text-white bg-transparent shadow-none cursor-pointer";
         const activeOfficial = "bg-slate-600 text-white shadow-sm";
         const activeOptimal = "bg-emerald-600 text-white shadow-sm";
+        const activeCustom = "bg-amber-600 text-white shadow-sm";
 
+        // Button States
         if (btnOfficial) btnOfficial.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${this.currentMode === 'official' ? activeOfficial : inactiveClass}`;
         if (btnOptimal) btnOptimal.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${this.currentMode === 'optimal' ? activeOptimal : inactiveClass}`;
         
-        if (this.currentMode === 'custom') {
-            if (btnCustom) btnCustom.classList.remove('hidden');
-            if (btnOfficial) btnOfficial.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${inactiveClass}`;
-            if (btnOptimal) btnOptimal.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${inactiveClass}`;
-        } else {
-            if (btnCustom) btnCustom.classList.add('hidden');
+        // Custom Button Logic: Show if we are in custom mode OR if we have history
+        if (btnCustom) {
+            if (this.currentMode === 'custom' || this.customData) {
+                btnCustom.classList.remove('hidden');
+                
+                // Toggle active/inactive style for Custom button
+                const customStyle = this.currentMode === 'custom' ? activeCustom : inactiveClass;
+                btnCustom.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${customStyle} ml-2`;
+                
+                // Optional: Remove pulse animation once it becomes a permanent tab
+                btnCustom.classList.remove('animate-pulse'); 
+            } else {
+                btnCustom.classList.add('hidden');
+            }
         }
 
         this.renderGridMatches();
         
         // --- METRICS UPDATE ---
-        
-        // 1. Determine Conversion Factor
         const factor = this.currentUnit === 'mi' ? 0.621371 : 1;
-        
-        // 2. Calculate Raw Distances (KM)
         const currentDistKm = this.calculateTotalDistance(this.scheduleData);
-        
-        // 3. Convert
         const currentDistDisplay = Math.round(currentDistKm * factor);
         const baselineDistDisplay = Math.round(this.baselineDist * factor);
         
-        // 4. Update DOM
         const distEl = document.getElementById('total-dist');
         if (distEl) distEl.innerText = currentDistDisplay.toLocaleString();
         
@@ -372,6 +385,9 @@ export class SchedulerApp {
 
         this.scheduleData[selfIndex].city = newCity;
         this.scheduleData[selfIndex].date = newDate;
+
+        // NEW: Save state to customData
+        this.customData = JSON.parse(JSON.stringify(this.scheduleData)); //
 
         this.currentMode = 'custom';
         this.updateUI();

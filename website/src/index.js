@@ -4,13 +4,12 @@ import { SchedulerApp } from './classes/scheduler.js';
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize App
     const app = new SchedulerApp();
-    
-    // Make app available globally for debugging (optional)
     window.app = app;
 
     // Attach Event Listeners to Buttons
     const btnOfficial = document.getElementById('btn-official');
     const btnOptimal = document.getElementById('btn-optimal');
+    const btnCustom = document.getElementById('btn-custom'); // Select the custom button
     const btnUnit = document.getElementById('btn-unit');
 
     if (btnOfficial) {
@@ -22,6 +21,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnOptimal) {
         btnOptimal.addEventListener('click', () => {
             app.setMode('optimal');
+        });
+    }
+
+    // NEW: Add listener for Custom button
+    if (btnCustom) {
+        btnCustom.addEventListener('click', () => {
+            app.setMode('custom');
         });
     }
 
