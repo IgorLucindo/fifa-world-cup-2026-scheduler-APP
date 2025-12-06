@@ -7,26 +7,41 @@
     <link rel="icon" href="website/assets/images/trophy.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0/index.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0/default.css">
     <link rel="stylesheet" href="website/css/styles.css">
 </head>
 
 <body class="bg-gray-50 text-slate-800 font-sans h-screen flex flex-col overflow-hidden">
     <header class="flex-none bg-slate-900 text-white p-4 shadow-lg z-30">
-        <div class="flex items-center justify-between max-w-7xl mx-auto">
-            <div class="flex items-center gap-3">
+        <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto gap-4">
+            
+            <div class="flex items-center gap-3 self-start md:self-auto">
                 <img src="website/assets/images/trophy.svg" class="w-8 h-8" alt="Trophy Icon">
                 <div>
                     <h1 class="text-xl font-bold tracking-tight">FIFA World Cup 2026 <span class="text-yellow-400 font-light">Scheduler</span></h1>
-                    <p class="text-xs text-slate-400">Research Paper Optimization Demo</p>
+                    <div class="flex items-center gap-2 text-xs text-slate-400">
+                        <p class="hidden sm:block">Research Paper Optimization Demo</p>
+                        <span class="hidden sm:block text-slate-600">•</span>
+                        <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="hover:text-yellow-400 transition-colors flex items-center gap-1">
+                        <span class="hidden sm:inline">Official Schedule</span>
+                        <span class="sm:hidden">FIFA Link</span>
+                        <i data-lucide="external-link" class="w-3 h-3"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-6 bg-slate-800 rounded-lg px-4 py-2 border border-slate-700">
+            <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+                
+                <div class="flex items-center justify-between w-full sm:w-auto gap-4 bg-slate-800 rounded-lg px-4 py-2 border border-slate-700">
                     <div class="flex flex-col items-end">
-                        <span class="text-[10px] uppercase tracking-wider text-slate-400">Total Travel</span>
+                        <span class="text-[10px] uppercase tracking-wider text-slate-400">Travel</span>
                         <div class="flex items-baseline gap-1">
-                            <span id="total-dist" class="text-2xl font-mono font-bold text-white">0</span>
+                            <span id="total-dist" class="text-xl sm:text-2xl font-mono font-bold text-white">0</span>
                             <span id="dist-unit" class="text-xs text-slate-400">km</span>
                         </div>
                     </div>
@@ -42,19 +57,21 @@
                     </div>
                 </div>
 
-                <button id="btn-unit" class="h-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all flex items-center">
-                    UNIT: KM
-                </button>
+                <div class="flex w-full sm:w-auto gap-2">
+                    <button id="btn-unit" class="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 rounded-lg px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all">
+                        Unit
+                    </button>
 
-                <div class="flex bg-slate-800 rounded-lg p-1 border border-slate-700 items-center">
-                    <button onclick="app.setMode('official')" id="btn-official" class="px-3 py-1.5 rounded-md text-sm font-medium transition-all text-slate-400 hover:text-white">
-                        Official Schedule
-                    </button>
-                    <button onclick="app.setMode('optimal')" id="btn-optimal" class="px-3 py-1.5 rounded-md text-sm font-medium transition-all bg-emerald-600 text-white shadow-sm">
-                        MIP Schedule
-                    </button>
-                    <div id="btn-custom" class="hidden px-3 py-1.5 rounded-md text-sm font-medium bg-amber-600 text-white shadow-sm animate-pulse ml-2">
-                        Custom Schedule
+                    <div class="flex flex-1 sm:flex-none bg-slate-800 rounded-lg p-1 border border-slate-700 items-center justify-center">
+                        <button onclick="app.setMode('official')" id="btn-official" class="flex-1 px-3 py-1.5 rounded-md text-sm font-medium transition-all text-slate-400 hover:text-white">
+                            Official Schedule
+                        </button>
+                        <button onclick="app.setMode('optimal')" id="btn-optimal" class="flex-1 px-3 py-1.5 rounded-md text-sm font-medium transition-all bg-emerald-600 text-white shadow-sm">
+                            MIP Schedule
+                        </button>
+                        <button id="btn-custom" class="hidden flex-1 px-3 py-1.5 rounded-md text-sm font-medium bg-amber-600 text-white shadow-sm ml-2">
+                            Custom Schedule
+                        </button>
                     </div>
                 </div>
             </div>
@@ -62,7 +79,7 @@
     </header>
 
     <div class="flex-1 overflow-auto bg-gray-100 p-6" id="main-container">
-        <div id="intro-banner" class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-r shadow-sm flex justify-between items-start max-w-[1800px] mx-auto">
+        <div id="intro-banner" class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-r shadow-sm flex flex-col sm:flex-row justify-between items-start max-w-[1800px] mx-auto gap-4">
             <div class="flex gap-3">
                 <div class="p-2 bg-blue-100 rounded-full text-blue-600 flex items-center justify-center h-10 w-10 shrink-0">
                     <i data-lucide="trophy" class="w-6 h-6"></i>

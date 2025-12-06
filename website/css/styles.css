@@ -65,3 +65,16 @@
     color: #b91c1c !important; /* red-700 */
     z-index: 60 !important; /* Ensure it stays on top */
 }
+
+/* iOS Safari specific fix to prevent text selection while dragging */
+.drop-zone, .cursor-move {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Ensure the draggable match stays above everything when being moved */
+.dnd-poly-drag-image {
+    opacity: 0.8 !important;
+    transform: scale(1.1);
+}

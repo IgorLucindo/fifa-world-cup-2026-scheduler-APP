@@ -2,6 +2,14 @@ import { SchedulerApp } from './classes/scheduler.js';
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    // --- NEW: Initialize Mobile Drag & Drop Polyfill ---
+    if (window.MobileDragDrop) {
+        MobileDragDrop.polyfill({
+            dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride
+        });
+        window.addEventListener('touchmove', function() {}, { passive: false });
+    }
+
     // Initialize App
     const app = new SchedulerApp();
     window.app = app;

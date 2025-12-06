@@ -225,7 +225,6 @@ export class SchedulerApp {
     }
 
     renderGridStructure() {
-        // ... (Keep existing implementation) ...
         const header = document.getElementById('grid-header');
         const body = document.getElementById('grid-body');
         if (!header || !body) return;
