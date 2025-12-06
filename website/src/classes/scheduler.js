@@ -230,7 +230,10 @@ export class SchedulerApp {
         if (!header || !body) return;
         const colString = `40px 130px repeat(${DATES.length}, minmax(60px, 1fr))`;
         header.style.gridTemplateColumns = colString;
-        let headerHtml = `<div class="sticky left-0 z-30 bg-gray-50 p-2 border-r border-gray-200 flex items-center justify-center shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]"><span class="text-[10px] font-bold text-slate-500 -rotate-90">REGION</span></div><div class="sticky left-[40px] z-30 bg-gray-50 p-2 border-r border-gray-200 flex items-center justify-center shadow-[4px_0_10px_-5px_rgba(0,0,0,0.1)]"><span class="text-xs font-bold text-gray-400">VENUE</span></div>`;
+
+        // Header generation
+        let headerHtml = `<div class="bg-gray-50 p-2 border-r border-gray-200 flex items-center justify-center"><span class="text-[10px] font-bold text-slate-500 -rotate-90">REGION</span></div><div class="bg-gray-50 p-2 border-r border-gray-200 flex items-center justify-center"><span class="text-xs font-bold text-gray-400">VENUE</span></div>`;
+        
         DATES.forEach(dateStr => {
             const day = dateStr.split('-')[2];
             const dateObj = new Date(parseInt(dateStr.split('-')[0]), parseInt(dateStr.split('-')[1])-1, parseInt(day));
@@ -238,27 +241,35 @@ export class SchedulerApp {
             headerHtml += `<div class="p-2 border-r border-gray-200 text-center overflow-hidden"><div class="text-xs font-bold text-slate-500 uppercase">${dayName}</div><div class="text-lg font-bold text-slate-800">${day}</div></div>`;
         });
         header.innerHTML = headerHtml;
+        
         body.className = "grid relative";
         body.style.gridTemplateColumns = colString;
+        
         const regionCounts = {};
         Object.values(CITIES).forEach(c => { regionCounts[c.region] = (regionCounts[c.region] || 0) + 1; });
         const processedRegions = new Set();
         let bodyHtml = '';
+        
         Object.keys(CITIES).forEach(cityKey => {
             const cityData = CITIES[cityKey];
             const regionData = REGIONS[cityData.region];
             if (!processedRegions.has(cityData.region)) {
                 const span = regionCounts[cityData.region];
-                bodyHtml += `<div class="sticky left-0 z-20 border-r border-white/20 border-b border-gray-100 flex items-center justify-center shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]" style="grid-row: span ${span}; background-color: ${regionData.color}"><span class="text-xs font-bold text-slate-800 uppercase tracking-widest whitespace-nowrap -rotate-90 transform">${regionData.label.split(' ')[0]}</span></div>`;
+                bodyHtml += `<div class="border-r border-white/20 border-b border-gray-100 flex items-center justify-center" style="grid-row: span ${span}; background-color: ${regionData.color}"><span class="text-xs font-bold text-slate-800 uppercase tracking-widest whitespace-nowrap -rotate-90 transform">${regionData.label.split(' ')[0]}</span></div>`;
                 processedRegions.add(cityData.region);
             }
-            bodyHtml += `<div class="sticky left-[40px] z-20 p-2 border-r border-white/20 border-b border-gray-100 flex flex-col justify-center shadow-[4px_0_10px_-5px_rgba(0,0,0,0.1)]" style="background-color: ${regionData.color}"><div class="font-bold text-slate-900 text-sm leading-tight truncate" title="${cityData.name}">${cityData.name}</div><span class="text-[9px] text-slate-800/60 font-medium mt-0.5 truncate">${cityKey}</span></div>`;
+            bodyHtml += `<div class="p-2 border-r border-white/20 border-b border-gray-100 flex flex-col justify-center" style="background-color: ${regionData.color}"><div class="font-bold text-slate-900 text-sm leading-tight truncate" title="${cityData.name}">${cityData.name}</div><span class="text-[9px] text-slate-800/60 font-medium mt-0.5 truncate">${cityKey}</span></div>`;
+            
             DATES.forEach(date => {
                 bodyHtml += `<div id="cell-${cityKey.replace(/ /g, '_')}-${date}" class="relative border-r border-gray-100 border-b border-gray-100 min-h-[80px] bg-white transition-all duration-200 drop-zone" data-city="${cityKey}" data-date="${date}"></div>`;
             });
         });
         body.innerHTML = bodyHtml;
+
+        // Attach Drop Zone Events
         document.querySelectorAll('.drop-zone').forEach(zone => {
+            // NEW: Added dragenter for better mobile compatibility
+            zone.addEventListener('dragenter', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
             zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
             zone.addEventListener('dragleave', (e) => { zone.classList.remove('drag-over'); });
             zone.addEventListener('drop', (e) => this.handleDrop(e));
@@ -273,7 +284,7 @@ export class SchedulerApp {
             const cell = document.getElementById(cellId);
             if (cell) {
                 const div = document.createElement('div');
-                div.id = `match-${match.id}`; // NEW: Add ID for DOM selection
+                div.id = `match-${match.id}`;
                 div.className = `absolute inset-0.5 rounded-sm shadow-sm border border-black/10 cursor-move flex flex-col items-center justify-center p-0.5 hover:scale-105 hover:shadow-md hover:z-50 transition-transform ${GROUPS[match.group] || 'bg-gray-500 text-white'}`;
                 div.draggable = true;
                 div.innerHTML = `
@@ -287,6 +298,8 @@ export class SchedulerApp {
                     this.draggedMatch = match;
                     div.classList.add('dragging');
                     e.dataTransfer.effectAllowed = "move";
+                    // NEW: setData is REQUIRED for mobile drag-drop polyfill to register the drag
+                    e.dataTransfer.setData('text/plain', JSON.stringify(match));
                 });
                 
                 div.addEventListener('dragend', () => {

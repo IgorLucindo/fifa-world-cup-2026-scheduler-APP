@@ -1,12 +1,17 @@
 import { SchedulerApp } from './classes/scheduler.js';
 
-
 document.addEventListener('DOMContentLoaded', () => {
-    // --- NEW: Initialize Mobile Drag & Drop Polyfill ---
+    // --- Initialize Mobile Drag & Drop Polyfill ---
     if (window.MobileDragDrop) {
         MobileDragDrop.polyfill({
-            dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride
+            // Override drag image positioning to work with scrolling
+            dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride,
+            // Lower the hold delay to 300ms (default is 500ms) for snappier feel
+            holdToDrag: 300 
         });
+        
+        // Prevent default touch actions that might interfere with dragging
+        // This is a standard fix for the polyfill on iOS
         window.addEventListener('touchmove', function() {}, { passive: false });
     }
 
@@ -17,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Attach Event Listeners to Buttons
     const btnOfficial = document.getElementById('btn-official');
     const btnOptimal = document.getElementById('btn-optimal');
-    const btnCustom = document.getElementById('btn-custom'); // Select the custom button
+    const btnCustom = document.getElementById('btn-custom'); 
     const btnUnit = document.getElementById('btn-unit');
 
     if (btnOfficial) {
@@ -32,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // NEW: Add listener for Custom button
     if (btnCustom) {
         btnCustom.addEventListener('click', () => {
             app.setMode('custom');
