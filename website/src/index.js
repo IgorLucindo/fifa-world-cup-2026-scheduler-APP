@@ -4,14 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initialize Mobile Drag & Drop Polyfill ---
     if (window.MobileDragDrop) {
         MobileDragDrop.polyfill({
-            // Override drag image positioning to work with scrolling
             dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride,
-            // Lower the hold delay to 300ms (default is 500ms) for snappier feel
-            holdToDrag: 300 
+            holdToDrag: 200, 
+            dragImageCenterOnTouch: true,
+            forceApply: true // NEW: Forces polyfill to work in DevTools/Hybrid devices
         });
         
-        // Prevent default touch actions that might interfere with dragging
-        // This is a standard fix for the polyfill on iOS
+        // Keep this listener to prevent default scrolling behavior during drags
         window.addEventListener('touchmove', function() {}, { passive: false });
     }
 

@@ -285,7 +285,8 @@ export class SchedulerApp {
             if (cell) {
                 const div = document.createElement('div');
                 div.id = `match-${match.id}`;
-                div.className = `absolute inset-0.5 rounded-sm shadow-sm border border-black/10 cursor-move flex flex-col items-center justify-center p-0.5 hover:scale-105 hover:shadow-md hover:z-50 transition-transform ${GROUPS[match.group] || 'bg-gray-500 text-white'}`;
+                // NEW: Added 'match-card' class for CSS targeting
+                div.className = `match-card absolute inset-0.5 rounded-sm shadow-sm border border-black/10 cursor-move flex flex-col items-center justify-center p-0.5 hover:scale-105 hover:shadow-md hover:z-50 transition-transform ${GROUPS[match.group] || 'bg-gray-500 text-white'}`;
                 div.draggable = true;
                 div.innerHTML = `
                     <div class="text-[8px] font-bold opacity-80 uppercase leading-none mb-0.5">Grp ${match.group}</div>
@@ -298,7 +299,7 @@ export class SchedulerApp {
                     this.draggedMatch = match;
                     div.classList.add('dragging');
                     e.dataTransfer.effectAllowed = "move";
-                    // NEW: setData is REQUIRED for mobile drag-drop polyfill to register the drag
+                    // REQUIRED for polyfill
                     e.dataTransfer.setData('text/plain', JSON.stringify(match));
                 });
                 
