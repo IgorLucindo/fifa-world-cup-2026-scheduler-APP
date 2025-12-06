@@ -184,7 +184,8 @@ export class SchedulerApp {
         if (btnCustom) {
             if (this.currentMode === 'custom' || this.customData) {
                 btnCustom.classList.remove('hidden');
-                btnCustom.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ml-2 ${this.currentMode === 'custom' ? activeCustom : inactiveClass}`;
+                // FIX: Ensured ml-2 is removed
+                btnCustom.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${this.currentMode === 'custom' ? activeCustom : inactiveClass}`;
                 btnCustom.classList.remove('animate-pulse');
             } else {
                 btnCustom.classList.add('hidden');
@@ -213,7 +214,7 @@ export class SchedulerApp {
                  effContainer.className = "flex items-baseline gap-1 font-mono font-bold text-slate-400";
                  effVal.innerText = "Baseline";
             } else {
-                if (diff <= 0) {
+                if (diff < 0) {
                     effContainer.className = "flex items-baseline gap-1 font-mono font-bold text-green-400";
                     effVal.innerText = "-" + Math.abs(diff).toLocaleString();
                 } else {
