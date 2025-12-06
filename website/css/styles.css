@@ -24,18 +24,6 @@
     box-shadow: inset 0 0 0 2px #60a5fa !important; /* blue-400 */
 }
 
-.match-card {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-    touch-action: none !important; /* CRITICAL: Prevents scrolling so drag can start */
-}
-
-/* NEW: Ensure touch events hit the draggable container, not the text inside */
-.match-card * {
-    pointer-events: none;
-}
-
 /* Error Notification Bubble (Toast) */
 .toast-error {
     position: fixed;
@@ -88,7 +76,20 @@
 
 /* Ensure the draggable match stays above everything when being moved */
 .dnd-poly-drag-image {
+    pointer-events: none !important;
     opacity: 0.9 !important;
     transform: scale(1.1);
     z-index: 9999 !important;
+}
+
+.match-card {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none !important; /* CRITICAL: Prevents scrolling so drag can start */
+}
+
+/* NEW: Ensure touch events hit the draggable container, not the text inside */
+.match-card * {
+    pointer-events: none;
 }

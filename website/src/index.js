@@ -5,12 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.MobileDragDrop) {
         MobileDragDrop.polyfill({
             dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride,
-            holdToDrag: 200, 
-            dragImageCenterOnTouch: true,
-            forceApply: true // NEW: Forces polyfill to work in DevTools/Hybrid devices
+            holdToDrag: 150, // Short delay for snappiness
+            dragImageCenterOnTouch: false, // FIX: Offset image so finger doesn't block drop zone
+            forceApply: true 
         });
         
-        // Keep this listener to prevent default scrolling behavior during drags
+        // Prevent default scrolling interference
         window.addEventListener('touchmove', function() {}, { passive: false });
     }
 

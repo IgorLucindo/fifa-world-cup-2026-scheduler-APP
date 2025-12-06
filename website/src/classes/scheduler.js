@@ -268,10 +268,20 @@ export class SchedulerApp {
 
         // Attach Drop Zone Events
         document.querySelectorAll('.drop-zone').forEach(zone => {
-            // NEW: Added dragenter for better mobile compatibility
-            zone.addEventListener('dragenter', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
-            zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
-            zone.addEventListener('dragleave', (e) => { zone.classList.remove('drag-over'); });
+            // NEW: Explicitly handle dragenter and set dropEffect
+            zone.addEventListener('dragenter', (e) => { 
+                e.preventDefault(); 
+                e.dataTransfer.dropEffect = "move"; 
+                zone.classList.add('drag-over'); 
+            });
+            zone.addEventListener('dragover', (e) => { 
+                e.preventDefault(); 
+                e.dataTransfer.dropEffect = "move"; 
+                zone.classList.add('drag-over'); 
+            });
+            zone.addEventListener('dragleave', (e) => { 
+                zone.classList.remove('drag-over'); 
+            });
             zone.addEventListener('drop', (e) => this.handleDrop(e));
         });
     }
