@@ -124,13 +124,15 @@ export class SchedulerApp {
     calculateDistance(city1, city2) {
         if (!CITIES[city1] || !CITIES[city2]) return 0;
         if (city1 === city2) return 0;
-        const R = 6371; 
+
+        const R = 3958.8; 
         const dLat = (CITIES[city2].lat - CITIES[city1].lat) * (Math.PI / 180);
         const dLon = (CITIES[city2].lon - CITIES[city1].lon) * (Math.PI / 180);
         const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.cos(CITIES[city1].lat * (Math.PI / 180)) * Math.cos(CITIES[city2].lat * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return Math.round(R * c);
+
+        return R * c;
     }
 
     calculateTotalDistance(data) {
@@ -184,7 +186,6 @@ export class SchedulerApp {
         if (btnCustom) {
             if (this.currentMode === 'custom' || this.customData) {
                 btnCustom.classList.remove('hidden');
-                // FIX: Ensured ml-2 is removed
                 btnCustom.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${this.currentMode === 'custom' ? activeCustom : inactiveClass}`;
                 btnCustom.classList.remove('animate-pulse');
             } else {
@@ -194,9 +195,13 @@ export class SchedulerApp {
 
         this.renderGridMatches();
         
-        const factor = this.currentUnit === 'mi' ? 0.621371 : 1;
-        const currentDistKm = this.calculateTotalDistance(this.scheduleData);
-        const currentDistDisplay = Math.round(currentDistKm * factor);
+        // If Unit is KM, multiply Miles by 1.609344
+        const factor = this.currentUnit === 'km' ? 1.609344 : 1;
+        
+        const currentDistBase = this.calculateTotalDistance(this.scheduleData);
+        
+        // Calculate display values
+        const currentDistDisplay = Math.round(currentDistBase * factor);
         const baselineDistDisplay = Math.round(this.baselineDist * factor);
         
         const distEl = document.getElementById('total-dist');
@@ -205,6 +210,7 @@ export class SchedulerApp {
         const unitEl = document.getElementById('dist-unit');
         if (unitEl) unitEl.innerText = this.currentUnit;
         
+        // Update Efficiency/Difference Display
         const diff = currentDistDisplay - baselineDistDisplay;
         const effContainer = document.getElementById('efficiency-container');
         const effVal = document.getElementById('eff-val');
@@ -214,7 +220,7 @@ export class SchedulerApp {
                  effContainer.className = "flex items-baseline gap-1 font-mono font-bold text-slate-400";
                  effVal.innerText = "Baseline";
             } else {
-                if (diff < 0) {
+                if (diff <= 0) {
                     effContainer.className = "flex items-baseline gap-1 font-mono font-bold text-green-400";
                     effVal.innerText = "-" + Math.abs(diff).toLocaleString();
                 } else {

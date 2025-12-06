@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.MobileDragDrop) {
         MobileDragDrop.polyfill({
             dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride,
-            holdToDrag: 50, // Short delay for snappiness
             dragImageCenterOnTouch: false, // FIX: Offset image so finger doesn't block drop zone
             forceApply: true 
         });
