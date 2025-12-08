@@ -79,24 +79,80 @@
     </header>
 
     <div class="flex-1 overflow-auto bg-gray-100 p-2 sm:p-6" id="main-container">
-        <div id="intro-banner" class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-r shadow-sm flex flex-col sm:flex-row justify-between items-start max-w-[1800px] mx-auto gap-4">
-            <div class="flex gap-3">
-                <div class="p-2 bg-blue-100 rounded-full text-blue-600 flex items-center justify-center h-10 w-10 shrink-0">
-                    <i data-lucide="trophy" class="w-6 h-6"></i>
+        <div id="intro-banner" class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-r shadow-sm flex flex-col justify-between items-start max-w-[1800px] mx-auto gap-4 transition-all duration-300">
+            <div class="flex flex-col sm:flex-row gap-4 w-full">
+                <div class="hidden sm:flex p-3 bg-blue-100 rounded-full text-blue-600 items-center justify-center h-12 w-12 shrink-0">
+                    <i data-lucide="book-open-check" class="w-6 h-6"></i>
                 </div>
-                <div>
-                    <h3 class="font-bold text-blue-900 text-lg">Challenge: Optimize FIFA World Cup Schedule</h3>
-                    <p class="text-blue-800 mt-1 max-w-3xl leading-relaxed">
-                        We have a schedule solved by a <span class="font-bold">Mixed Integer Programming (MIP)</span> model optimized for travel efficiency. 
-                        You can <span class="font-bold">build your own schedule</span> by dragging and dropping matches below to see if you can beat the algorithm or create a better flow.
-                    </p>
+                <div class="space-y-3 w-full">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-blue-900 text-lg">Challenge: Optimize FIFA World Cup Schedule</h3>
+                            <p class="text-blue-800 mt-1 max-w-5xl leading-relaxed">
+                                We have a schedule solved by a <span class="font-bold">Mixed Integer Programming (MIP)</span> model optimized for travel efficiency. 
+                                You can <span class="font-bold">build your own schedule</span> by dragging and dropping matches below to see if you can beat the algorithm or create a better flow, while following the rules.
+                            </p>
+                            
+                            <button onclick="
+                                const grid = document.getElementById('rules-grid');
+                                const icon = document.getElementById('rules-chevron');
+                                grid.classList.toggle('hidden');
+                                icon.classList.toggle('rotate-180');
+                            " 
+                            class="mt-2 text-xs font-bold text-blue-700 hover:text-blue-900 bg-blue-100/50 hover:bg-blue-100 border border-blue-200 px-3 py-1.5 rounded-full flex items-center gap-1 transition-all w-fit">
+                                <span>View Rules</span>
+                                <i id="rules-chevron" data-lucide="chevron-down" class="w-3 h-3 transition-transform duration-200"></i>
+                            </button>
+                        </div>
+
+                        <button onclick="document.getElementById('intro-banner').remove()" class="text-blue-400 hover:text-blue-700 transition-colors p-1 shrink-0" aria-label="Close banner">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <div id="rules-grid" class="hidden grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-xs sm:text-sm text-blue-900/90 font-medium bg-blue-100/40 p-4 rounded-lg border border-blue-200 transition-all">
+                        
+                        <ul class="space-y-2">
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-blue-700 whitespace-nowrap">1. Unique Slot:</span>
+                                <span>Each match assigned exactly one stadium & day.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-blue-700 whitespace-nowrap">2. Daily Rhythm:</span>
+                                <span>4 matches/day (Rounds 1-2), 6 (Round 3).</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-blue-700 whitespace-nowrap">3. Venue Load:</span>
+                                <span>Stadiums must host a balanced number of matches.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-blue-700 whitespace-nowrap">4. Partner Sync:</span>
+                                <span>Paired group matches must be played on the same day.</span>
+                            </li>
+                        </ul>
+
+                        <ul class="space-y-2">
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-blue-700 whitespace-nowrap">5. Stadium Rest:</span>
+                                <span>No consecutive matches at a stadium (min 1-2 days).</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-blue-700 whitespace-nowrap">6. Team Rest:</span>
+                                <span>Min 3 full rest days between a team's matches.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-blue-700 whitespace-nowrap">7. Consistency:</span>
+                                <span>Matches must occur where teams are assigned.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-blue-700 whitespace-nowrap">8. Single Venue:</span>
+                                <span>Teams stay in exactly one stadium per round.</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <button onclick="document.getElementById('intro-banner').remove()" class="text-blue-400 hover:text-blue-700 transition-colors p-1">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
         </div>
-
         <div class="max-w-[1800px] mx-auto bg-white shadow-xl rounded-xl border border-gray-200 w-fit min-w-full">
             <div id="grid-header" class="grid border-b border-gray-200 bg-gray-50"></div>
             <div id="grid-body" class="relative"></div>

@@ -235,17 +235,28 @@ export class SchedulerApp {
         const header = document.getElementById('grid-header');
         const body = document.getElementById('grid-body');
         if (!header || !body) return;
-        const colString = `40px 130px repeat(${DATES.length}, minmax(60px, 1fr))`;
+
+        // NEW: Check if screen is small (mobile)
+        const isMobile = window.innerWidth < 640;
+
+        // DEFINITION: Narrower columns for Mobile "Zoomed Out" view
+        // Mobile: 20px Region | 60px City | 45px Date
+        // Desktop: 40px Region | 130px City | 60px Date
+        const colString = isMobile 
+            ? `20px 60px repeat(${DATES.length}, minmax(45px, 1fr))`
+            : `40px 130px repeat(${DATES.length}, minmax(60px, 1fr))`;
+        
         header.style.gridTemplateColumns = colString;
 
-        // Header generation
-        let headerHtml = `<div class="bg-gray-50 p-2 border-r border-gray-200 flex items-center justify-center"><span class="text-[10px] font-bold text-slate-500 -rotate-90">REGION</span></div><div class="bg-gray-50 p-2 border-r border-gray-200 flex items-center justify-center"><span class="text-xs font-bold text-gray-400">VENUE</span></div>`;
+        // Header Generation (With Responsive Text Sizes)
+        let headerHtml = `<div class="bg-gray-50 p-1 sm:p-2 border-r border-gray-200 flex items-center justify-center"><span class="text-[8px] sm:text-[10px] font-bold text-slate-500 -rotate-90">REG</span></div><div class="bg-gray-50 p-1 sm:p-2 border-r border-gray-200 flex items-center justify-center"><span class="text-[8px] sm:text-xs font-bold text-gray-400">VENUE</span></div>`;
         
         DATES.forEach(dateStr => {
             const day = dateStr.split('-')[2];
             const dateObj = new Date(parseInt(dateStr.split('-')[0]), parseInt(dateStr.split('-')[1])-1, parseInt(day));
             const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
-            headerHtml += `<div class="p-2 border-r border-gray-200 text-center overflow-hidden"><div class="text-xs font-bold text-slate-500 uppercase">${dayName}</div><div class="text-lg font-bold text-slate-800">${day}</div></div>`;
+            // Responsive: Smaller padding, smaller text on mobile
+            headerHtml += `<div class="p-1 sm:p-2 border-r border-gray-200 text-center overflow-hidden"><div class="text-[8px] sm:text-xs font-bold text-slate-500 uppercase">${dayName}</div><div class="text-xs sm:text-lg font-bold text-slate-800">${day}</div></div>`;
         });
         header.innerHTML = headerHtml;
         
@@ -262,20 +273,22 @@ export class SchedulerApp {
             const regionData = REGIONS[cityData.region];
             if (!processedRegions.has(cityData.region)) {
                 const span = regionCounts[cityData.region];
-                bodyHtml += `<div class="border-r border-white/20 border-b border-gray-100 flex items-center justify-center" style="grid-row: span ${span}; background-color: ${regionData.color}"><span class="text-xs font-bold text-slate-800 uppercase tracking-widest whitespace-nowrap -rotate-90 transform">${regionData.label.split(' ')[0]}</span></div>`;
+                // Responsive: Tighter region label
+                bodyHtml += `<div class="border-r border-white/20 border-b border-gray-100 flex items-center justify-center" style="grid-row: span ${span}; background-color: ${regionData.color}"><span class="text-[8px] sm:text-xs font-bold text-slate-800 uppercase tracking-widest whitespace-nowrap -rotate-90 transform">${regionData.label.split(' ')[0]}</span></div>`;
                 processedRegions.add(cityData.region);
             }
-            bodyHtml += `<div class="p-2 border-r border-white/20 border-b border-gray-100 flex flex-col justify-center" style="background-color: ${regionData.color}"><div class="font-bold text-slate-900 text-sm leading-tight truncate" title="${cityData.name}">${cityData.name}</div><span class="text-[9px] text-slate-800/60 font-medium mt-0.5 truncate">${cityKey}</span></div>`;
+            // Responsive: Truncate city name, smaller font
+            bodyHtml += `<div class="p-1 sm:p-2 border-r border-white/20 border-b border-gray-100 flex flex-col justify-center" style="background-color: ${regionData.color}"><div class="font-bold text-slate-900 text-[10px] sm:text-sm leading-tight truncate" title="${cityData.name}">${cityData.name}</div><span class="text-[7px] sm:text-[9px] text-slate-800/60 font-medium mt-0.5 truncate hidden sm:block">${cityKey}</span></div>`;
             
             DATES.forEach(date => {
-                bodyHtml += `<div id="cell-${cityKey.replace(/ /g, '_')}-${date}" class="relative border-r border-gray-100 border-b border-gray-100 min-h-[80px] bg-white transition-all duration-200 drop-zone" data-city="${cityKey}" data-date="${date}"></div>`;
+                // Responsive: Min-height reduced for mobile (60px vs 80px)
+                bodyHtml += `<div id="cell-${cityKey.replace(/ /g, '_')}-${date}" class="relative border-r border-gray-100 border-b border-gray-100 min-h-[60px] sm:min-h-[80px] bg-white transition-all duration-200 drop-zone" data-city="${cityKey}" data-date="${date}"></div>`;
             });
         });
         body.innerHTML = bodyHtml;
 
-        // Attach Drop Zone Events
+        // Attach Drop Zone Events (Same as before)
         document.querySelectorAll('.drop-zone').forEach(zone => {
-            // NEW: Explicitly handle dragenter and set dropEffect
             zone.addEventListener('dragenter', (e) => { 
                 e.preventDefault(); 
                 e.dataTransfer.dropEffect = "move"; 
@@ -302,21 +315,40 @@ export class SchedulerApp {
             if (cell) {
                 const div = document.createElement('div');
                 div.id = `match-${match.id}`;
-                // NEW: Added 'match-card' class for CSS targeting
                 div.className = `match-card absolute inset-0.5 rounded-sm shadow-sm border border-black/10 cursor-move flex flex-col items-center justify-center p-0.5 hover:scale-105 hover:shadow-md hover:z-50 transition-transform ${GROUPS[match.group] || 'bg-gray-500 text-white'}`;
                 div.draggable = true;
+
+                // NEW: Responsive Display Logic
+                const getTeamDisplay = (name) => {
+                    // Check for group names (containing slashes)
+                    if (name.includes('/')) {
+                        return {
+                            html: name.replace(/\//g, '/<wbr>'),
+                            // Mobile: text-[6px], Desktop: text-[9px]
+                            css: "font-bold text-[6px] sm:text-[9.5px] leading-[7px] sm:leading-[10px] text-center w-full break-words whitespace-normal"
+                        };
+                    }
+                    // Standard teams: Mobile: text-[9px], Desktop: text-xs
+                    return {
+                        html: name,
+                        css: "font-bold text-[9px] sm:text-xs leading-tight text-center w-full truncate"
+                    };
+                };
+
+                const t1 = getTeamDisplay(match.t1);
+                const t2 = getTeamDisplay(match.t2);
+
                 div.innerHTML = `
-                    <div class="text-[8px] font-bold opacity-80 uppercase leading-none mb-0.5">Grp ${match.group}</div>
-                    <div class="font-bold text-[10px] leading-tight text-center w-full truncate">${match.t1}</div>
-                    <div class="text-[8px] opacity-60 leading-none">vs</div>
-                    <div class="font-bold text-[10px] leading-tight text-center w-full truncate">${match.t2}</div>
+                    <div class="text-[6px] sm:text-[8px] font-bold opacity-80 uppercase leading-none mb-0.5">Grp ${match.group}</div>
+                    <div class="${t1.css}">${t1.html}</div>
+                    <div class="text-[6px] sm:text-[8px] opacity-60 leading-none">vs</div>
+                    <div class="${t2.css}">${t2.html}</div>
                 `;
                 
                 div.addEventListener('dragstart', (e) => {
                     this.draggedMatch = match;
                     div.classList.add('dragging');
                     e.dataTransfer.effectAllowed = "move";
-                    // REQUIRED for polyfill
                     e.dataTransfer.setData('text/plain', JSON.stringify(match));
                 });
                 
