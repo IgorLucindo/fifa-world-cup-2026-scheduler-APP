@@ -240,7 +240,7 @@ export class SchedulerApp {
 
         if (distEl) {
             // Update values
-            distEl.innerText = currentDistDisplay.toLocaleString();
+            distEl.innerText = currentDistDisplay.toLocaleString('en-US');
             if (unitEl) unitEl.innerText = this.currentUnit;
             if (zonesEl) zonesEl.innerText = currentRegions;
 
@@ -292,7 +292,7 @@ export class SchedulerApp {
                 
                 const color = val <= 0 ? 'text-green-400' : 'text-red-400';
                 const sign = val > 0 ? '+' : '';
-                return `<span class="${color}">${sign}${val.toLocaleString()} ${label}</span>`;
+                return `<span class="${color}">${sign}${val.toLocaleString('en-US')} ${label}</span>`;
             };
 
             const distHtml = getStatHtml(diffDist, '');
@@ -301,11 +301,11 @@ export class SchedulerApp {
             effContainer.className = "flex flex-col items-start font-mono font-bold text-[10px] sm:text-xs leading-tight";
             effContainer.innerHTML = `
                 <div class="flex items-center gap-1">
-                    <span>Dist:</span>
+                    <span>Distance:</span>
                     ${distHtml}
                 </div>
                 <div class="flex items-center gap-1 border-t border-slate-700 mt-0.5 pt-0.5 w-full">
-                    <span>Zones:</span>
+                    <span>Crossed Zones:</span>
                     ${regHtml}
                 </div>
             `;
