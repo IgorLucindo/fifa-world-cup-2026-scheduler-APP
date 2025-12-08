@@ -540,4 +540,50 @@ export class SchedulerApp {
         });
         legend.innerHTML = html;
     }
+
+    downloadAll() {
+        // Download all three schedules with a slight delay to prevent browser blocking
+        this.exportToCSV(this.officialData, 'official_schedule.csv');
+        setTimeout(() => this.exportToCSV(this.optimalData, 'mip_schedule.csv'), 300);
+        if (this.customData) {
+            setTimeout(() => this.exportToCSV(this.customData, 'your_schedule.csv'), 600);
+        }
+    }
+
+    exportToCSV(data, filename) {
+        // Create Header Row
+        const header = ['City', ...DATES].join(',');
+
+        // Create Rows for each City
+        const rows = Object.keys(CITIES).map(cityKey => {
+            const row = [cityKey];
+            
+            DATES.forEach(date => {
+                // Find match for this city and date
+                const match = data.find(m => m.city === cityKey && m.date === date);
+                if (match) {
+                    // Reconstruct match string: m1 (A): Team1 vs Team2
+                    const idStr = match.id.replace('m', '');
+                    // Wrap in quotes to handle special characters safely
+                    row.push(`"m${idStr} (${match.group}): ${match.t1} vs ${match.t2}"`);
+                } else {
+                    row.push('');
+                }
+            });
+            return row.join(',');
+        });
+
+        // Combine and Download
+        const csvContent = [header, ...rows].join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 }
