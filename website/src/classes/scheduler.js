@@ -239,21 +239,16 @@ export class SchedulerApp {
         const zonesEl = document.getElementById('total-zones');
 
         if (distEl) {
-            // Update values only if elements exist to prevent clearing user selection
+            // Update values
             distEl.innerText = currentDistDisplay.toLocaleString();
             if (unitEl) unitEl.innerText = this.currentUnit;
             if (zonesEl) zonesEl.innerText = currentRegions;
 
-            // Layout Structure Update
-            // We target parentElement (the value container), NOT closest 'flex-col' (the wrapper with Title)
-            const valueRow = distEl.parentElement;
-            
-            if (valueRow) {
-                // Ensure Side-by-Side layout
-                valueRow.className = "flex items-baseline gap-4"; 
-                
-                // Only inject HTML if the Zones element is missing (first run after refresh)
-                if (!zonesEl) {
+            // Only modify DOM structure if Zones element is missing (First Run)
+            if (!zonesEl) {
+                const valueRow = distEl.parentElement;
+                if (valueRow) {
+                    valueRow.className = "flex items-baseline gap-4"; 
                     valueRow.innerHTML = `
                         <div class="flex items-baseline gap-1">
                             <span id="total-dist" class="text-lg sm:text-1xl font-mono font-bold text-white">${currentDistDisplay.toLocaleString()}</span>
@@ -281,13 +276,13 @@ export class SchedulerApp {
             const distHtml = getStatHtml(diffDist, '');
             const regHtml = getStatHtml(diffRegions, '');
 
-            effContainer.className = "flex flex-col items-end font-mono font-bold text-[10px] sm:text-xs leading-tight";
+            effContainer.className = "flex flex-col items-start font-mono font-bold text-[10px] sm:text-xs leading-tight";
             effContainer.innerHTML = `
                 <div class="flex items-center gap-1">
-                    <span>Dist: </span>
+                    <span>Dist:</span>
                     ${distHtml}
                 </div>
-                <div class="flex items-center gap-1 border-t border-slate-700 mt-0.5 pt-0.5 w-full justify-end">
+                <div class="flex items-center gap-1 border-t border-slate-700 mt-0.5 pt-0.5 w-full">
                     <span>Zones:</span>
                     ${regHtml}
                 </div>
