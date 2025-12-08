@@ -34,7 +34,7 @@ export class SchedulerApp {
         try {
             const [official, optimal] = await Promise.all([
                 this.loadSchedule(`./dataset/${encodeURIComponent('official_schedule.csv')}`),
-                this.loadSchedule(`./dataset/${encodeURIComponent('MIP_schedule.csv')}`)
+                this.loadSchedule(`./dataset/${encodeURIComponent('mip_schedule.csv')}`)
             ]);
 
             this.officialData = official;
