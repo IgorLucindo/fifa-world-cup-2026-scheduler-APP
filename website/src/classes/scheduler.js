@@ -244,18 +244,40 @@ export class SchedulerApp {
             if (unitEl) unitEl.innerText = this.currentUnit;
             if (zonesEl) zonesEl.innerText = currentRegions;
 
-            // Only modify DOM structure if Zones element is missing (First Run)
-            if (!zonesEl) {
-                const valueRow = distEl.parentElement;
-                if (valueRow) {
-                    valueRow.className = "flex items-baseline gap-4"; 
+            // CORRECT LOGIC: Identify 'valueRow' correctly based on whether structure is already modified
+            let valueRow = distEl.parentElement;
+            if (zonesEl) {
+                // If zonesEl exists, distEl is wrapped in an inner div, so valueRow is parent's parent
+                valueRow = valueRow.parentElement;
+            }
+
+            if (valueRow) {
+                // Ensure Single Line Layout (flex-nowrap) persists
+                valueRow.className = "flex items-baseline gap-4 flex-nowrap"; 
+                
+                const travelWrapper = valueRow.parentElement;
+                if (travelWrapper) {
+                    // CENTER on Mobile
+                    travelWrapper.className = "flex flex-col items-center sm:items-end flex-1";
+                    
+                    const mainStatBox = travelWrapper.parentElement;
+                    if (mainStatBox) {
+                        // ALIGN TITLES Vertically
+                        if (mainStatBox.classList.contains('items-center')) {
+                            mainStatBox.classList.remove('items-center');
+                            mainStatBox.classList.add('items-stretch');
+                        }
+                    }
+                }
+
+                if (!zonesEl) {
                     valueRow.innerHTML = `
                         <div class="flex items-baseline gap-1">
-                            <span id="total-dist" class="text-lg sm:text-1xl font-mono font-bold text-white">${currentDistDisplay.toLocaleString()}</span>
+                            <span id="total-dist" class="text-lg sm:text-2xl font-mono font-bold text-white">${currentDistDisplay.toLocaleString()}</span>
                             <span id="dist-unit" class="text-xs text-slate-400">${this.currentUnit}</span>
                         </div>
                         <div class="flex items-baseline gap-1">
-                            <span id="total-zones" class="text-lg sm:text-1xl font-mono font-bold text-white">${currentRegions}</span>
+                            <span id="total-zones" class="text-lg sm:text-2xl font-mono font-bold text-white">${currentRegions}</span>
                             <span class="text-[10px] text-slate-400 uppercase">Zones</span>
                         </div>
                     `;
@@ -287,6 +309,12 @@ export class SchedulerApp {
                     ${regHtml}
                 </div>
             `;
+
+            const effWrapper = effContainer.parentElement;
+            if (effWrapper) {
+                // CENTER on Mobile
+                effWrapper.className = "flex flex-col items-center sm:items-end flex-1";
+            }
         }
     }
 
