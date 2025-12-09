@@ -541,21 +541,37 @@ export class SchedulerApp {
         legend.innerHTML = html;
     }
 
-    downloadAll() {
+    async downloadAll() {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 640;
 
         if (isMobile) {
-            // MOBILE: Download only ONE file to prevent blocking. 
-            // Prioritize Custom schedule if it exists, otherwise the current mode.
-            if (this.customData) {
-                this.exportToCSV(this.customData, 'your_schedule.csv');
-            } else if (this.currentMode === 'official') {
-                this.exportToCSV(this.officialData, 'official_schedule.csv');
-            } else {
-                this.exportToCSV(this.optimalData, 'mip_schedule.csv');
+            // MOBILE: Bundle all files into one ZIP to bypass browser blocking
+            if (typeof JSZip === 'undefined') {
+                alert("JSZip library not found. Please add it to index.html");
+                return;
             }
+
+            const zip = new JSZip();
+            
+            // Add files to the ZIP
+            zip.file("official_schedule.csv", this.getCSVString(this.officialData));
+            zip.file("mip_schedule.csv", this.getCSVString(this.optimalData));
+            
+            if (this.customData) {
+                zip.file("your_schedule.csv", this.getCSVString(this.customData));
+            }
+
+            // Generate and Download Zip
+            try {
+                const content = await zip.generateAsync({ type: "blob" });
+                this.triggerFileDownload(content, "fifa_schedules.zip");
+            } catch (e) {
+                console.error("Error zipping files:", e);
+                alert("Could not create zip file.");
+            }
+
         } else {
-            // DESKTOP: Download all relevant files
+            // DESKTOP: Download individual files (Sequence)
             this.exportToCSV(this.officialData, 'official_schedule.csv');
             setTimeout(() => this.exportToCSV(this.optimalData, 'mip_schedule.csv'), 300);
             
@@ -565,11 +581,10 @@ export class SchedulerApp {
         }
     }
 
-    exportToCSV(data, filename) {
-        // Create Header
+    // Helper: Generates the CSV string content
+    getCSVString(data) {
         const header = ['City', ...DATES].join(',');
-
-        // Create Rows
+        
         const rows = Object.keys(CITIES).map(cityKey => {
             const row = [cityKey];
             DATES.forEach(date => {
@@ -584,28 +599,33 @@ export class SchedulerApp {
             return row.join(',');
         });
 
-        // Combine
-        const csvContent = [header, ...rows].join('\n');
-        
-        // Create Blob
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        return [header, ...rows].join('\n');
+    }
+
+    // Helper: Handles the actual file download logic
+    triggerFileDownload(blob, filename) {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
         
-        link.setAttribute("href", url);
-        link.setAttribute("download", filename);
-        
-        // iOS SAFARI FIX: Open in new tab to force the "View/Download" prompt
+        // iOS Safari Requirement: Open in new tab to force download prompt
         if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
             link.target = '_blank';
         }
 
         link.style.display = 'none';
         document.body.appendChild(link);
-        
         link.click();
         
         document.body.removeChild(link);
         setTimeout(() => URL.revokeObjectURL(url), 100);
+    }
+
+    // Legacy support for Desktop sequence
+    exportToCSV(data, filename) {
+        const csvContent = this.getCSVString(data);
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        this.triggerFileDownload(blob, filename);
     }
 }
