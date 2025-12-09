@@ -5,8 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.MobileDragDrop) {
         MobileDragDrop.polyfill({
             dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride,
-            dragImageCenterOnTouch: false, // FIX: Offset image so finger doesn't block drop zone
-            forceApply: true 
+            dragImageCenterOnTouch: false, 
+            forceApply: true,
+            holdToDrag: 1
         });
         
         // Prevent default scrolling interference
