@@ -74,14 +74,6 @@
     touch-action: manipulation; /* Improves touch handling */
 }
 
-/* Ensure the draggable match stays above everything when being moved */
-.dnd-poly-drag-image {
-    pointer-events: none !important;
-    opacity: 0.9 !important;
-    transform: scale(1.1);
-    z-index: 9999 !important;
-}
-
 .match-card {
     -webkit-touch-callout: none;
     -webkit-user-select: none;

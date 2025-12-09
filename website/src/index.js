@@ -1,19 +1,7 @@
 import { SchedulerApp } from './classes/scheduler.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-    // --- Initialize Mobile Drag & Drop Polyfill ---
-    if (window.MobileDragDrop) {
-        MobileDragDrop.polyfill({
-            dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride,
-            dragImageCenterOnTouch: false, 
-            forceApply: true,
-            holdToDrag: 1
-        });
-        
-        // Prevent default scrolling interference
-        window.addEventListener('touchmove', function() {}, { passive: false });
-    }
 
+document.addEventListener('DOMContentLoaded', () => {
     // Initialize App
     const app = new SchedulerApp();
     window.app = app;

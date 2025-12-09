@@ -1,5 +1,6 @@
 import { CITIES, DATES, GROUPS, REGIONS } from '../data/data.js';
 
+
 export class SchedulerApp {
     constructor() {
         this.officialData = [];
@@ -392,22 +393,32 @@ export class SchedulerApp {
             if (cell) {
                 const div = document.createElement('div');
                 div.id = `match-${match.id}`;
+                // Keep your existing classes
                 div.className = `match-card absolute inset-0.5 rounded-sm shadow-sm border border-black/10 cursor-move flex flex-col items-center justify-center p-0.5 hover:scale-105 hover:shadow-md hover:z-50 transition-transform ${GROUPS[match.group] || 'bg-gray-500 text-white'}`;
+                
+                // Desktop Drag Events (Keep these for PC)
                 div.draggable = true;
+                div.addEventListener('dragstart', (e) => {
+                    this.draggedMatch = match;
+                    div.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = "move";
+                    e.dataTransfer.setData('text/plain', JSON.stringify(match));
+                });
+                div.addEventListener('dragend', () => {
+                    this.draggedMatch = null;
+                    div.classList.remove('dragging');
+                });
 
+                // NEW: Mobile Instant Touch Events
+                div.addEventListener('touchstart', (e) => this.handleTouchStart(e, match, div), { passive: false });
+
+                // Helper for team names (from your original code)
                 const getTeamDisplay = (name) => {
                     if (name.includes('/')) {
-                        return {
-                            html: name.replace(/\//g, '/<wbr>'),
-                            css: "font-bold text-[6px] sm:text-[9.5px] leading-[7px] sm:leading-[10px] text-center w-full break-words whitespace-normal"
-                        };
+                        return { html: name.replace(/\//g, '/<wbr>'), css: "font-bold text-[6px] sm:text-[9.5px] leading-[7px] sm:leading-[10px] text-center w-full break-words whitespace-normal" };
                     }
-                    return {
-                        html: name,
-                        css: "font-bold text-[9px] sm:text-xs leading-tight text-center w-full truncate"
-                    };
+                    return { html: name, css: "font-bold text-[9px] sm:text-xs leading-tight text-center w-full truncate" };
                 };
-
                 const t1 = getTeamDisplay(match.t1);
                 const t2 = getTeamDisplay(match.t2);
 
@@ -417,18 +428,6 @@ export class SchedulerApp {
                     <div class="text-[6px] sm:text-[8px] opacity-60 leading-none">vs</div>
                     <div class="${t2.css}">${t2.html}</div>
                 `;
-                
-                div.addEventListener('dragstart', (e) => {
-                    this.draggedMatch = match;
-                    div.classList.add('dragging');
-                    e.dataTransfer.effectAllowed = "move";
-                    e.dataTransfer.setData('text/plain', JSON.stringify(match));
-                });
-                
-                div.addEventListener('dragend', () => {
-                    this.draggedMatch = null;
-                    div.classList.remove('dragging');
-                });
 
                 cell.appendChild(div);
             }
@@ -627,5 +626,134 @@ export class SchedulerApp {
         const csvContent = this.getCSVString(data);
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         this.triggerFileDownload(blob, filename);
+    }
+
+    handleTouchStart(e, match, originalEl) {
+        // 1. Prevent default to stop scrolling/native behavior
+        if (e.cancelable) e.preventDefault();
+
+        this.draggedMatch = match;
+        const touch = e.touches[0];
+
+        // 2. Create a "Ghost" element to follow the finger
+        this.ghostEl = originalEl.cloneNode(true);
+        this.ghostEl.style.position = 'fixed';
+        this.ghostEl.style.zIndex = '9999';
+        this.ghostEl.style.width = `${originalEl.offsetWidth}px`;
+        this.ghostEl.style.height = `${originalEl.offsetHeight}px`;
+        this.ghostEl.style.opacity = '0.9';
+        this.ghostEl.style.pointerEvents = 'none'; // Critical: allows elementFromPoint to see the drop zone underneath
+        this.ghostEl.classList.add('shadow-2xl');
+        
+        // Initial positioning
+        this.updateGhostPosition(touch);
+        document.body.appendChild(this.ghostEl);
+
+        // 3. Highlight the original card to show it's being moved
+        originalEl.classList.add('opacity-50');
+        this.activeDragEl = originalEl;
+
+        // 4. Bind global move/end listeners (using arrow functions to keep 'this' context)
+        this._touchMoveHandler = (ev) => this.handleTouchMove(ev);
+        this._touchEndHandler = (ev) => this.handleTouchEnd(ev);
+
+        document.addEventListener('touchmove', this._touchMoveHandler, { passive: false });
+        document.addEventListener('touchend', this._touchEndHandler, { passive: false });
+    }
+
+    handleTouchMove(e) {
+        if (e.cancelable) e.preventDefault(); // Stop scrolling while dragging
+        const touch = e.touches[0];
+        this.updateGhostPosition(touch);
+
+        // Optional: Highlight drop zone under finger
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        const zone = target ? target.closest('.drop-zone') : null;
+        
+        // Clear previous highlights
+        document.querySelectorAll('.drop-zone.drag-over').forEach(el => el.classList.remove('drag-over'));
+        if (zone) zone.classList.add('drag-over');
+    }
+
+    handleTouchEnd(e) {
+        // Clean up listeners
+        document.removeEventListener('touchmove', this._touchMoveHandler);
+        document.removeEventListener('touchend', this._touchEndHandler);
+
+        // Remove Ghost
+        if (this.ghostEl) {
+            this.ghostEl.remove();
+            this.ghostEl = null;
+        }
+
+        // Restore original element style
+        if (this.activeDragEl) {
+            this.activeDragEl.classList.remove('opacity-50');
+            this.activeDragEl = null;
+        }
+
+        // Find drop target
+        const touch = e.changedTouches[0];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        const zone = target ? target.closest('.drop-zone') : null;
+
+        // Clear highlight
+        document.querySelectorAll('.drop-zone.drag-over').forEach(el => el.classList.remove('drag-over'));
+
+        if (zone) {
+            // Manually trigger the drop logic
+            this.processCustomDrop(zone);
+        }
+    }
+
+    updateGhostPosition(touch) {
+        if (this.ghostEl) {
+            // Center the ghost on the finger
+            this.ghostEl.style.left = `${touch.clientX - (this.ghostEl.offsetWidth / 2)}px`;
+            this.ghostEl.style.top = `${touch.clientY - (this.ghostEl.offsetHeight / 2)}px`;
+        }
+    }
+
+    // A helper to reuse logic between Desktop Drop and Mobile Drop
+    processCustomDrop(zone) {
+        const newCity = zone.dataset.city;
+        const newDate = zone.dataset.date;
+        
+        // Reuse your existing logic, but adapted since we don't have a DragEvent
+        if (!this.draggedMatch) return;
+
+        const tempSchedule = JSON.parse(JSON.stringify(this.scheduleData));
+        const changedMatches = [];
+        const selfIndex = tempSchedule.findIndex(m => m.id === this.draggedMatch.id);
+        const otherMatchIndex = tempSchedule.findIndex(m => m.city === newCity && m.date === newDate && m.id !== this.draggedMatch.id);
+
+        if (selfIndex === -1) return;
+
+        if (otherMatchIndex !== -1) {
+            tempSchedule[otherMatchIndex].city = this.draggedMatch.city;
+            tempSchedule[otherMatchIndex].date = this.draggedMatch.date;
+            changedMatches.push(tempSchedule[otherMatchIndex]);
+        }
+
+        tempSchedule[selfIndex].city = newCity;
+        tempSchedule[selfIndex].date = newDate;
+        changedMatches.push(tempSchedule[selfIndex]);
+
+        const errorMsg = this.validateConstraints(tempSchedule, changedMatches);
+
+        if (errorMsg) {
+            this.showError(errorMsg);
+            const el = document.getElementById(`match-${this.draggedMatch.id}`);
+            if (el) {
+                el.classList.add('shake-invalid');
+                setTimeout(() => el.classList.remove('shake-invalid'), 500);
+            }
+            return;
+        }
+
+        this.scheduleData = tempSchedule;
+        this.customData = JSON.parse(JSON.stringify(this.scheduleData));
+        this.currentMode = 'custom';
+        this.updateUI();
     }
 }
