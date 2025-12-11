@@ -545,25 +545,27 @@ export class SchedulerApp {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 640;
 
         if (isMobile) {
-            // MOBILE: Open the currently active schedule in the browser
+            // MOBILE: Download ONLY the currently active schedule with the CORRECT filename
+            // This replaces the previous logic to fix the "Unknown.csv" issue.
             
+            let filename = 'fifa_schedule.csv';
+            if (this.currentMode === 'official') filename = 'official_schedule.csv';
+            else if (this.currentMode === 'optimal') filename = 'mip_schedule.csv';
+            else if (this.currentMode === 'custom') filename = 'your_schedule.csv';
+
             // 1. Get content from the CURRENT displayed schedule
-            // this.scheduleData always contains the data currently visible on screen
             const csvContent = this.getCSVString(this.scheduleData);
             
-            // 2. Create a Blob
+            // 2. Create Blob
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-
-            // 3. Open in a new tab/window
-            // This allows the browser to handle the file (view text, save, or share)
-            window.open(url, '_blank');
-
-            // Cleanup
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            
+            // 3. Trigger Download 
+            // We use triggerFileDownload() because it creates an <a> tag with the 'download' attribute.
+            // This guarantees the browser receives the correct filename.
+            this.triggerFileDownload(blob, filename);
 
         } else {
-            // DESKTOP: Keep existing behavior (Download all relevant files)
+            // DESKTOP: Download individual files (Sequence) - No changes here
             this.exportToCSV(this.officialData, 'official_schedule.csv');
             setTimeout(() => this.exportToCSV(this.optimalData, 'mip_schedule.csv'), 300);
             
