@@ -545,54 +545,25 @@ export class SchedulerApp {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 640;
 
         if (isMobile) {
-            // MOBILE: Bundle all files into one ZIP
-            if (typeof JSZip === 'undefined') {
-                alert("JSZip library not found. Please add it to index.html");
-                return;
-            }
-
-            const zip = new JSZip();
+            // MOBILE: Open the currently active schedule in the browser
             
-            // Add files to the ZIP
-            zip.file("official_schedule.csv", this.getCSVString(this.officialData));
-            zip.file("mip_schedule.csv", this.getCSVString(this.optimalData));
+            // 1. Get content from the CURRENT displayed schedule
+            // this.scheduleData always contains the data currently visible on screen
+            const csvContent = this.getCSVString(this.scheduleData);
             
-            if (this.customData) {
-                zip.file("your_schedule.csv", this.getCSVString(this.customData));
-            }
+            // 2. Create a Blob
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
 
-            // Generate ZIP
-            try {
-                const content = await zip.generateAsync({ type: "blob" });
+            // 3. Open in a new tab/window
+            // This allows the browser to handle the file (view text, save, or share)
+            window.open(url, '_blank');
 
-                // NEW: Prepare File object for the Web Share API
-                const file = new File([content], "fifa_schedules.zip", { type: "application/zip" });
-
-                // NEW: Try to open the native Share Sheet
-                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                    try {
-                        await navigator.share({
-                            files: [file],
-                            title: 'FIFA World Cup 2026 Schedules',
-                            text: 'Here are the official and optimized schedules for the tournament.'
-                        });
-                        return; // Stop here if share was successful
-                    } catch (err) {
-                        console.warn("Share cancelled or failed, falling back to download:", err);
-                        // Continue to download logic if share fails/cancels
-                    }
-                }
-
-                // Fallback: Standard Download
-                this.triggerFileDownload(content, "fifa_schedules.zip");
-
-            } catch (e) {
-                console.error("Error processing files:", e);
-                alert("Could not process files.");
-            }
+            // Cleanup
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
 
         } else {
-            // DESKTOP: Download individual files (Sequence)
+            // DESKTOP: Keep existing behavior (Download all relevant files)
             this.exportToCSV(this.officialData, 'official_schedule.csv');
             setTimeout(() => this.exportToCSV(this.optimalData, 'mip_schedule.csv'), 300);
             
