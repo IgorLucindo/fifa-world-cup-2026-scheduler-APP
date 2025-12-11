@@ -277,9 +277,10 @@ export class SchedulerApp {
                             <span id="total-dist" class="text-lg sm:text-2xl font-mono font-bold text-white">${currentDistDisplay.toLocaleString()}</span>
                             <span id="dist-unit" class="text-xs text-slate-400">${this.currentUnit}</span>
                         </div>
-                        <div class="flex items-baseline gap-1">
+                        
+                        <div class="flex items-center gap-1">
                             <span id="total-zones" class="text-lg sm:text-2xl font-mono font-bold text-white">${currentRegions}</span>
-                            <span class="text-[10px] text-slate-400 uppercase">Zones</span>
+                            <span class="text-[8px] text-slate-400 uppercase leading-3">Crossed<br>Zones</span>
                         </div>
                     `;
                 }
