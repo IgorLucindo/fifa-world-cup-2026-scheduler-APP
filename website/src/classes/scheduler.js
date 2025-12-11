@@ -544,7 +544,7 @@ export class SchedulerApp {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 640;
 
         if (isMobile) {
-            // MOBILE: Bundle all files into one ZIP to bypass browser blocking
+            // MOBILE: Bundle all files into one ZIP
             if (typeof JSZip === 'undefined') {
                 alert("JSZip library not found. Please add it to index.html");
                 return;
@@ -560,13 +560,34 @@ export class SchedulerApp {
                 zip.file("your_schedule.csv", this.getCSVString(this.customData));
             }
 
-            // Generate and Download Zip
+            // Generate ZIP
             try {
                 const content = await zip.generateAsync({ type: "blob" });
+
+                // NEW: Prepare File object for the Web Share API
+                const file = new File([content], "fifa_schedules.zip", { type: "application/zip" });
+
+                // NEW: Try to open the native Share Sheet
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: 'FIFA World Cup 2026 Schedules',
+                            text: 'Here are the official and optimized schedules for the tournament.'
+                        });
+                        return; // Stop here if share was successful
+                    } catch (err) {
+                        console.warn("Share cancelled or failed, falling back to download:", err);
+                        // Continue to download logic if share fails/cancels
+                    }
+                }
+
+                // Fallback: Standard Download
                 this.triggerFileDownload(content, "fifa_schedules.zip");
+
             } catch (e) {
-                console.error("Error zipping files:", e);
-                alert("Could not create zip file.");
+                console.error("Error processing files:", e);
+                alert("Could not process files.");
             }
 
         } else {
