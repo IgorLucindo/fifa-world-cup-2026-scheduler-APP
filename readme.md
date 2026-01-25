@@ -26,8 +26,8 @@ The schedules used for the official fixture list and the mathematically optimize
 
 ## ⚽ Interactive App
 
-To make the optimization results accessible to non-technical audiences, we provide a web-based dashboard of our model. This interactive tool allows users to visualize the match schedule and compare the official constraints against our optimized travel-minimization model.
+To make the optimization results accessible to non-technical audiences, we provide a web-based app of our model. This interactive tool allows users to visualize the match schedule and compare the official constraints against our optimized travel-minimization model.
 
-[![Open Dashboard](https://img.shields.io/badge/OPEN_APP-World_Cup_Scheduler-2ea44f?style=for-the-badge)](https://igorlucindo.github.io/fifa-world-cup-2026-scheduler-APP/)
+[![Open App](https://img.shields.io/badge/OPEN_APP-World_Cup_Scheduler-2ea44f?style=for-the-badge)](https://igorlucindo.github.io/fifa-world-cup-2026-scheduler-APP/)
 
 Users can interact with the schedule directly to validate logical constraints and explore the efficiency of different scheduling strategies.
