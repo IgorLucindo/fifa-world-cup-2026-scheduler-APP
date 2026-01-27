@@ -24,7 +24,7 @@ The schedules used for the official fixture list and the mathematically optimize
 * Calculates distances dynamically using the **Haversine formula** based on city coordinates.
 * Enforces real-world constraints, requiring **2 days of rest for stadiums** and **3 days of rest for teams** between matches.
 
-## ⚽ Interactive App
+## 🚀 Interactive App
 
 To make the optimization results accessible to non-technical audiences, we provide a web-based app of our model. This interactive tool allows users to visualize the match schedule and compare the official constraints against our optimized travel-minimization model.
 
