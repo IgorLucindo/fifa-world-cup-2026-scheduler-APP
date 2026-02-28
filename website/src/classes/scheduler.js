@@ -1,6 +1,24 @@
 import { CITIES, DATES, GROUPS, REGIONS } from '../data/data.js';
 
 
+const FLAG_CODES = {
+    'ARG': 'ar', 'AUS': 'au', 'AUT': 'at', 'BEL': 'be', 'BOL': 'bo',
+    'BRA': 'br', 'CAN': 'ca', 'CIV': 'ci', 'COD': 'cd', 'COL': 'co',
+    'CPV': 'cv', 'CRC': 'cr', 'CRO': 'hr', 'CUW': 'cw', 'DEN': 'dk',
+    'ECU': 'ec', 'EGY': 'eg', 'ENG': 'gb-eng', 'ESP': 'es', 'FRA': 'fr',
+    'GER': 'de', 'GHA': 'gh', 'HAI': 'ht', 'IRN': 'ir', 'IRQ': 'iq',
+    'ITA': 'it', 'JAM': 'jm', 'JOR': 'jo', 'JPN': 'jp', 'KDR': 'kp',
+    'KOR': 'kr', 'KSA': 'sa', 'MAR': 'ma', 'MEX': 'mx', 'NCL': 'nc',
+    'NED': 'nl', 'NIR': 'gb-nir', 'NOR': 'no', 'NZL': 'nz', 'PAN': 'pa',
+    'PAR': 'py', 'POL': 'pl', 'POR': 'pt', 'QAT': 'qa', 'RSA': 'za',
+    'SCO': 'gb-sct', 'SEN': 'sn', 'SOL': 'sb', 'SUI': 'ch', 'SUR': 'sr',
+    'SWE': 'se', 'TUN': 'tn', 'TUR': 'tr', 'UKR': 'ua', 'URU': 'uy',
+    'USA': 'us', 'UZB': 'uz', 'WAL': 'gb-wls', 'ALG': 'dz', 'ROU': 'ro',
+    'SVK': 'sk', 'KOS': 'xk', 'BIH': 'ba', 'MKD': 'mk', 'CZE': 'cz',
+    'IRL': 'ie', 'ALB': 'al'
+};
+
+
 export class SchedulerApp {
     constructor() {
         this.officialData = [];
@@ -215,12 +233,12 @@ export class SchedulerApp {
         if (btnOptimal) btnOptimal.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${this.currentMode === 'optimal' ? activeOptimal : inactiveClass}`;
         
         if (btnCustom) {
-            if (this.currentMode === 'custom' || this.customData) {
-                btnCustom.classList.remove('hidden');
+            if (this.customData) {
+                btnCustom.disabled = false;
                 btnCustom.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${this.currentMode === 'custom' ? activeCustom : inactiveClass}`;
-                btnCustom.classList.remove('animate-pulse');
             } else {
-                btnCustom.classList.add('hidden');
+                btnCustom.disabled = true;
+                btnCustom.className = `px-3 py-1.5 rounded-md text-sm font-medium transition-all text-slate-600 bg-transparent cursor-not-allowed whitespace-nowrap`;
             }
         }
 
@@ -394,10 +412,11 @@ export class SchedulerApp {
             if (cell) {
                 const div = document.createElement('div');
                 div.id = `match-${match.id}`;
-                // Keep your existing classes
-                div.className = `match-card absolute inset-0.5 rounded-sm shadow-sm border border-black/10 cursor-move flex flex-col items-center justify-center p-0.5 hover:scale-105 hover:shadow-md hover:z-50 transition-transform ${GROUPS[match.group] || 'bg-gray-500 text-white'}`;
                 
-                // Desktop Drag Events (Keep these for PC)
+                // Base card
+                div.className = `match-card absolute inset-0.5 bg-white rounded shadow-sm border border-slate-200 cursor-move flex overflow-hidden hover:scale-110 hover:shadow-lg hover:z-50 transition-all duration-200`;
+                
+                // Desktop Drag Events
                 div.draggable = true;
                 div.addEventListener('dragstart', (e) => {
                     this.draggedMatch = match;
@@ -410,24 +429,53 @@ export class SchedulerApp {
                     div.classList.remove('dragging');
                 });
 
-                // NEW: Mobile Instant Touch Events
+                // Mobile Drag Events
                 div.addEventListener('touchstart', (e) => this.handleTouchStart(e, match, div), { passive: false });
 
-                // Helper for team names (from your original code)
+                // Flag helper
                 const getTeamDisplay = (name) => {
                     if (name.includes('/')) {
-                        return { html: name.replace(/\//g, '/<wbr>'), css: "font-bold text-[6px] sm:text-[9.5px] leading-[7px] sm:leading-[10px] text-center w-full break-words whitespace-normal" };
+                        // Flag wrapper
+                        const flagsHtml = name.split('/').map(n => {
+                            const code = FLAG_CODES[n.trim()];
+                            if (code) {
+                                return `<img src="https://flagcdn.com/${code}.svg" class="w-full h-full object-cover" alt="${n.trim()}" title="${n.trim()}">`;
+                            }
+                            return `<div class="w-full h-full flex items-center justify-center bg-slate-100"><span class="text-[4px] font-bold text-slate-800">${n.trim()}</span></div>`;
+                        }).join('');
+                        
+                        return `<div class="grid grid-cols-2 grid-rows-2 gap-[1px] h-full max-w-[85%] sm:max-w-[75%] max-h-[90%] aspect-[3/2] shrink-0 rounded-[2px] overflow-hidden border border-black/15 shadow-sm bg-slate-200 mx-auto">${flagsHtml}</div>`;
                     }
-                    return { html: name, css: "font-bold text-[9px] sm:text-xs leading-tight text-center w-full truncate" };
+                    
+                    // Single Flag
+                    const code = FLAG_CODES[name.trim()];
+                    if (code) {
+                        return `<img src="https://flagcdn.com/${code}.svg" class="max-w-[85%] sm:max-w-[75%] max-h-[90%] rounded-[2px] border border-black/15 shadow-sm shrink-0 mx-auto" alt="${name.trim()}" title="${name.trim()}">`;
+                    }
+                    
+                    return `<span class="font-bold text-[9px] leading-tight text-center truncate px-1">${name}</span>`;
                 };
-                const t1 = getTeamDisplay(match.t1);
-                const t2 = getTeamDisplay(match.t2);
+                
+                const t1Html = getTeamDisplay(match.t1);
+                const t2Html = getTeamDisplay(match.t2);
+
+                const groupBgClass = GROUPS[match.group] ? GROUPS[match.group].split(' ')[0] : 'bg-slate-400';
 
                 div.innerHTML = `
-                    <div class="text-[6px] sm:text-[8px] font-bold opacity-80 uppercase leading-none mb-0.5">Grp ${match.group}</div>
-                    <div class="${t1.css}">${t1.html}</div>
-                    <div class="text-[6px] sm:text-[8px] opacity-60 leading-none">vs</div>
-                    <div class="${t2.css}">${t2.html}</div>
+                    <div class="w-1.5 sm:w-2 h-full shrink-0 ${groupBgClass}"></div>
+                    
+                    <div class="flex flex-col items-center justify-center w-full h-full py-0.5 bg-white relative">
+                        
+                        <div class="flex-1 w-full flex items-center justify-center min-h-0 overflow-hidden">
+                            ${t1Html}
+                        </div>
+                        
+                        <div class="text-[7px] sm:text-[12px] text-slate-500 my-[1px]">vs</div>
+                        
+                        <div class="flex-1 w-full flex items-center justify-center min-h-0 overflow-hidden">
+                            ${t2Html}
+                        </div>
+                    </div>
                 `;
 
                 cell.appendChild(div);
@@ -443,6 +491,14 @@ export class SchedulerApp {
         };
 
         for (const m of changedMatches) {
+            const matchesOnDay = tempSchedule.filter(x => x.date === m.date);
+            const isRound3 = new Date(m.date) >= new Date('2026-06-24');
+            const maxMatches = isRound3 ? 6 : 4;
+            
+            if (matchesOnDay.length > maxMatches) {
+                return `Exceeded daily limit on ${m.date} (Max ${maxMatches} matches).`;
+            }
+
             const cityMatches = tempSchedule.filter(x => x.city === m.city).sort((a, b) => new Date(a.date) - new Date(b.date));
             const mIndex = cityMatches.findIndex(x => x.id === m.id);
             
