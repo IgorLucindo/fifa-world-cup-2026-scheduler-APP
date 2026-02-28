@@ -85,3 +85,13 @@
 .match-card * {
     pointer-events: none;
 }
+
+.rotate-180 {
+    transform: rotate(180deg) !important;
+}
+
+#chevron-container {
+    /* Ensures the rotation happens around the center */
+    transform-origin: center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

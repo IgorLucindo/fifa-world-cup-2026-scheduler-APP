@@ -1,9 +1,3 @@
-export const REGIONS = {
-    'Western': { color: '#6bcbc0', label: 'WESTERN REGION' }, // Teal
-    'Central': { color: '#9cd267', label: 'CENTRAL REGION' }, // Green
-    'Eastern': { color: '#fa9d8d', label: 'EASTERN REGION' }  // Salmon
-};
-
 export const CITIES = {
     // Western
     'Vancouver': { lat: 49.282729, lon: -123.120738, name: 'Vancouver', region: 'Western' },
@@ -28,11 +22,13 @@ export const CITIES = {
     'East_Rutherford': { lat: 40.813600, lon: -74.074500, name: 'New York/NJ', region: 'Eastern' },
 };
 
+
 export const DATES = [
     '2026-06-11', '2026-06-12', '2026-06-13', '2026-06-14', '2026-06-15', '2026-06-16',
     '2026-06-17', '2026-06-18', '2026-06-19', '2026-06-20', '2026-06-21', '2026-06-22',
     '2026-06-23', '2026-06-24', '2026-06-25', '2026-06-26', '2026-06-27'
 ];
+
 
 export const GROUPS = {
     'A': 'bg-[#9cd267] text-black',
@@ -47,4 +43,29 @@ export const GROUPS = {
     'J': 'bg-[#ffb4b9] text-black',
     'K': 'bg-[#f93591] text-white',
     'L': 'bg-[#8a1538] text-white',
+};
+
+
+export const REGIONS = {
+    'Western': { color: '#6bcbc0', label: 'WESTERN REGION' }, // Teal
+    'Central': { color: '#9cd267', label: 'CENTRAL REGION' }, // Green
+    'Eastern': { color: '#fa9d8d', label: 'EASTERN REGION' }  // Salmon
+};
+
+
+export const FLAG_CODES = {
+    'ARG': 'ar', 'AUS': 'au', 'AUT': 'at', 'BEL': 'be', 'BOL': 'bo',
+    'BRA': 'br', 'CAN': 'ca', 'CIV': 'ci', 'COD': 'cd', 'COL': 'co',
+    'CPV': 'cv', 'CRC': 'cr', 'CRO': 'hr', 'CUW': 'cw', 'DEN': 'dk',
+    'ECU': 'ec', 'EGY': 'eg', 'ENG': 'gb-eng', 'ESP': 'es', 'FRA': 'fr',
+    'GER': 'de', 'GHA': 'gh', 'HAI': 'ht', 'IRN': 'ir', 'IRQ': 'iq',
+    'ITA': 'it', 'JAM': 'jm', 'JOR': 'jo', 'JPN': 'jp', 'KDR': 'kp',
+    'KOR': 'kr', 'KSA': 'sa', 'MAR': 'ma', 'MEX': 'mx', 'NCL': 'nc',
+    'NED': 'nl', 'NIR': 'gb-nir', 'NOR': 'no', 'NZL': 'nz', 'PAN': 'pa',
+    'PAR': 'py', 'POL': 'pl', 'POR': 'pt', 'QAT': 'qa', 'RSA': 'za',
+    'SCO': 'gb-sct', 'SEN': 'sn', 'SOL': 'sb', 'SUI': 'ch', 'SUR': 'sr',
+    'SWE': 'se', 'TUN': 'tn', 'TUR': 'tr', 'UKR': 'ua', 'URU': 'uy',
+    'USA': 'us', 'UZB': 'uz', 'WAL': 'gb-wls', 'ALG': 'dz', 'ROU': 'ro',
+    'SVK': 'sk', 'KOS': 'xk', 'BIH': 'ba', 'MKD': 'mk', 'CZE': 'cz',
+    'IRL': 'ie', 'ALB': 'al'
 };

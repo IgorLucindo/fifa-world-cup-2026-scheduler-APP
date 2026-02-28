@@ -1,22 +1,4 @@
-import { CITIES, DATES, GROUPS, REGIONS } from '../data/data.js';
-
-
-const FLAG_CODES = {
-    'ARG': 'ar', 'AUS': 'au', 'AUT': 'at', 'BEL': 'be', 'BOL': 'bo',
-    'BRA': 'br', 'CAN': 'ca', 'CIV': 'ci', 'COD': 'cd', 'COL': 'co',
-    'CPV': 'cv', 'CRC': 'cr', 'CRO': 'hr', 'CUW': 'cw', 'DEN': 'dk',
-    'ECU': 'ec', 'EGY': 'eg', 'ENG': 'gb-eng', 'ESP': 'es', 'FRA': 'fr',
-    'GER': 'de', 'GHA': 'gh', 'HAI': 'ht', 'IRN': 'ir', 'IRQ': 'iq',
-    'ITA': 'it', 'JAM': 'jm', 'JOR': 'jo', 'JPN': 'jp', 'KDR': 'kp',
-    'KOR': 'kr', 'KSA': 'sa', 'MAR': 'ma', 'MEX': 'mx', 'NCL': 'nc',
-    'NED': 'nl', 'NIR': 'gb-nir', 'NOR': 'no', 'NZL': 'nz', 'PAN': 'pa',
-    'PAR': 'py', 'POL': 'pl', 'POR': 'pt', 'QAT': 'qa', 'RSA': 'za',
-    'SCO': 'gb-sct', 'SEN': 'sn', 'SOL': 'sb', 'SUI': 'ch', 'SUR': 'sr',
-    'SWE': 'se', 'TUN': 'tn', 'TUR': 'tr', 'UKR': 'ua', 'URU': 'uy',
-    'USA': 'us', 'UZB': 'uz', 'WAL': 'gb-wls', 'ALG': 'dz', 'ROU': 'ro',
-    'SVK': 'sk', 'KOS': 'xk', 'BIH': 'ba', 'MKD': 'mk', 'CZE': 'cz',
-    'IRL': 'ie', 'ALB': 'al'
-};
+import { CITIES, DATES, GROUPS, REGIONS, FLAG_CODES } from '../data/data.js';
 
 
 export class SchedulerApp {
@@ -346,7 +328,7 @@ export class SchedulerApp {
         const isMobile = window.innerWidth < 640;
 
         const colString = isMobile 
-            ? `20px 60px repeat(${DATES.length}, minmax(45px, 1fr))`
+            ? `20px 70px repeat(${DATES.length}, minmax(60px, 1fr))`
             : `40px 130px repeat(${DATES.length}, minmax(60px, 1fr))`;
         
         header.style.gridTemplateColumns = colString;
@@ -587,14 +569,23 @@ export class SchedulerApp {
     }
 
     renderLegend() {
-        const legend = document.getElementById('legend');
-        if (!legend) return;
-        let html = '<span class="font-bold text-gray-700">LEGEND:</span>';
+        const legendDesktop = document.getElementById('legend');
+        const legendMobile = document.getElementById('legend-mobile');
+        
+        let desktopHtml = '<span class="font-bold text-gray-700 mt-0.5">LEGEND:</span>';
+        let mobileHtml = '<span class="font-bold text-gray-700 text-[10px] mr-3 mt-[2px] shrink-0">LEGEND:</span>';
+        mobileHtml += '<div class="grid grid-cols-4 gap-x-1 gap-y-1 w-full max-w-[240px]">';
+
         Object.keys(GROUPS).forEach(g => {
             const colorClass = GROUPS[g].split(' ')[0];
-            html += `<div class="flex items-center gap-1"><div class="w-3 h-3 rounded-sm ${colorClass}"></div><span>Grp ${g}</span></div>`;
+            desktopHtml += `<div class="flex items-center gap-1"><div class="w-3 h-3 rounded-sm ${colorClass}"></div><span>Grp ${g}</span></div>`;
+            mobileHtml += `<div class="flex items-center gap-0.5"><div class="w-2 h-2 rounded-[1px] ${colorClass} shrink-0"></div><span class="text-[9px] font-bold text-slate-500 leading-none mt-[1px]">Grp ${g}</span></div>`;
         });
-        legend.innerHTML = html;
+        
+        mobileHtml += '</div>';
+
+        if (legendDesktop) legendDesktop.innerHTML = desktopHtml;
+        if (legendMobile) legendMobile.innerHTML = mobileHtml;
     }
 
     async downloadAll() {
