@@ -58,8 +58,7 @@ export const FLAG_CODES = {
     'BRA': 'br', 'CAN': 'ca', 'CIV': 'ci', 'COD': 'cd', 'COL': 'co',
     'CPV': 'cv', 'CRC': 'cr', 'CRO': 'hr', 'CUW': 'cw', 'DEN': 'dk',
     'ECU': 'ec', 'EGY': 'eg', 'ENG': 'gb-eng', 'ESP': 'es', 'FRA': 'fr',
-    'GER': 'de', 'GHA': 'gh', 'HAI': 'ht',
-    'IRN': 'assets/images/flags/iran.svg', 'IRQ': 'iq',
+    'GER': 'de', 'GHA': 'gh', 'HAI': 'ht', 'IRN': 'ir', 'IRQ': 'iq',
     'ITA': 'it', 'JAM': 'jm', 'JOR': 'jo', 'JPN': 'jp', 'KDR': 'kp',
     'KOR': 'kr', 'KSA': 'sa', 'MAR': 'ma', 'MEX': 'mx', 'NCL': 'nc',
     'NED': 'nl', 'NIR': 'gb-nir', 'NOR': 'no', 'NZL': 'nz', 'PAN': 'pa',
@@ -69,4 +68,8 @@ export const FLAG_CODES = {
     'USA': 'us', 'UZB': 'uz', 'WAL': 'gb-wls', 'ALG': 'dz', 'ROU': 'ro',
     'SVK': 'sk', 'KOS': 'xk', 'BIH': 'ba', 'MKD': 'mk', 'CZE': 'cz',
     'IRL': 'ie', 'ALB': 'al'
+};
+
+export const FLAG_CUSTOM_SRCS = {
+    'IRN': 'website/assets/images/flags/iran.svg'
 };
