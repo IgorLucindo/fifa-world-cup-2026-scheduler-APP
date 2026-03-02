@@ -421,7 +421,8 @@ export class SchedulerApp {
                         const flagsHtml = name.split('/').map(n => {
                             const code = FLAG_CODES[n.trim()];
                             if (code) {
-                                return `<img src="https://flagcdn.com/${code}.svg" class="w-full h-full object-cover" alt="${n.trim()}" title="${n.trim()}">`;
+                                const imgSrc = code.includes('/') ? code : `https://flagcdn.com/${code}.svg`;
+                                return `<img src="${imgSrc}" class="w-full h-full object-cover" alt="${n.trim()}" title="${n.trim()}">`;
                             }
                             return `<div class="w-full h-full flex items-center justify-center bg-slate-100"><span class="text-[4px] font-bold text-slate-800">${n.trim()}</span></div>`;
                         }).join('');
@@ -432,7 +433,8 @@ export class SchedulerApp {
                     // Single Flag
                     const code = FLAG_CODES[name.trim()];
                     if (code) {
-                        return `<img src="https://flagcdn.com/${code}.svg" class="max-w-[85%] sm:max-w-[75%] max-h-[90%] rounded-[2px] border border-black/15 shadow-sm shrink-0 mx-auto" alt="${name.trim()}" title="${name.trim()}">`;
+                        const imgSrc = code.includes('/') ? code : `https://flagcdn.com/${code}.svg`;
+                        return `<img src="${imgSrc}" class="max-w-[85%] sm:max-w-[75%] max-h-[90%] rounded-[2px] border border-black/15 shadow-sm shrink-0 mx-auto" alt="${name.trim()}" title="${name.trim()}">`;
                     }
                     
                     return `<span class="font-bold text-[9px] leading-tight text-center truncate px-1">${name}</span>`;
