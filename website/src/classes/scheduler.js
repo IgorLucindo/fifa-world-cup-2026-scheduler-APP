@@ -429,26 +429,33 @@ export class SchedulerApp {
 
                 // Flag helper
                 const getTeamDisplay = (name) => {
+                    // Standardized dimensions for all flag containers
+                    const containerClasses = "w-7 h-5 sm:w-10 sm:h-6 flex items-center justify-center overflow-hidden rounded-[3px] border border-black/15 shadow-sm bg-slate-100 mx-auto";
+                    
                     if (name.includes('/')) {
-                        // Flag wrapper
+                        // Multiple teams
                         const flagsHtml = name.split('/').map(n => {
                             const src = this.flagSrcs[n.trim()];
                             if (src) {
-                                return `<img src="${src}" class="w-full h-full object-cover" alt="${n.trim()}" title="${n.trim()}">`;
+                                return `<img src="${src}" class="w-full h-full object-cover" alt="${n.trim()}">`;
                             }
-                            return `<div class="w-full h-full flex items-center justify-center bg-slate-100"><span class="text-[4px] font-bold text-slate-800">${n.trim()}</span></div>`;
+                            return `<div class="w-full h-full flex items-center justify-center bg-slate-200">
+                                        <span class="text-[6px] font-bold text-slate-800">${n.trim().substring(0,2)}</span>
+                                    </div>`;
                         }).join('');
                         
-                        return `<div class="grid grid-cols-2 grid-rows-2 gap-[1px] h-full max-w-[85%] sm:max-w-[75%] max-h-[90%] aspect-[3/2] shrink-0 rounded-[2px] overflow-hidden border border-black/15 shadow-sm bg-slate-200 mx-auto">${flagsHtml}</div>`;
+                        return `<div class="${containerClasses} grid grid-cols-2 grid-rows-2 gap-[1px]">${flagsHtml}</div>`;
                     }
                     
                     // Single Flag
                     const src = this.flagSrcs[name.trim()];
                     if (src) {
-                        return `<img src="${src}" class="max-w-[85%] sm:max-w-[75%] max-h-[90%] rounded-[2px] border border-black/15 shadow-sm shrink-0 mx-auto" alt="${name.trim()}" title="${name.trim()}">`;
+                        return `<div class="${containerClasses}">
+                                    <img src="${src}" class="w-full h-full object-cover" alt="${name.trim()}">
+                                </div>`;
                     }
                     
-                    return `<span class="font-bold text-[9px] leading-tight text-center truncate px-1">${name}</span>`;
+                    return `<div class="${containerClasses}"><span class="font-bold text-[10px]">${name}</span></div>`;
                 };
                 
                 const t1Html = getTeamDisplay(match.t1);
