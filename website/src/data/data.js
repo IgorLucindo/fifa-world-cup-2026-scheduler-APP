@@ -19,7 +19,7 @@ export const CITIES = {
     'Toronto': { lat: 43.651070, lon: -79.347015, name: 'Toronto', region: 'Eastern' },
     'Foxborough': { lat: 42.090900, lon: -71.264300, name: 'Boston', region: 'Eastern' },
     'Philadelphia': { lat: 39.900800, lon: -75.167500, name: 'Philadelphia', region: 'Eastern' },
-    'East_Rutherford': { lat: 40.813600, lon: -74.074500, name: 'New York/NJ', region: 'Eastern' },
+    'East_Rutherford': { lat: 40.813600, lon: -74.074500, name: 'New York/NJ', region: 'Eastern' }
 };
 
 

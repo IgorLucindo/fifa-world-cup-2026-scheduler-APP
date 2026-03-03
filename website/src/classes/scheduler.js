@@ -492,7 +492,36 @@ export class SchedulerApp {
             return Math.abs((date2 - date1) / (1000 * 60 * 60 * 24));
         };
 
+        const FIXED_OPENING_DATES = ['2026-06-11', '2026-06-12'];
+        const HOST_OPENING_VENUES = {
+            'MEX': { date: '2026-06-11', city: 'Mexico_City', display: 'Mexico City' },
+            'CAN': { date: '2026-06-12', city: 'Toronto', display: 'Toronto' },
+            'USA': { date: '2026-06-12', city: 'Inglewood', display: 'Los Angeles (Inglewood)' }
+        };
+
+        // Set constraints
         for (const m of changedMatches) {
+            // 1. NEW CONSTRAINT: Host opening games must be in their designated cities
+            for (const team of ['MEX', 'CAN', 'USA']) {
+                const opener = HOST_OPENING_VENUES[team];
+                
+                // If the match involves the host on their opening date
+                if ((m.t1 === team || m.t2 === team) && m.date === opener.date) {
+                    if (m.city !== opener.city) {
+                        return `${team}'s opening match is fixed to ${opener.display}.`;
+                    }
+                }
+            }
+
+            // 2. PREVIOUS CONSTRAINT: Opening matches cannot change days
+            const originalMatch = this.scheduleData.find(om => om.id === m.id);
+            if (originalMatch) {
+                if (FIXED_OPENING_DATES.includes(m.date) && originalMatch.date !== m.date) {
+                    return `New matches cannot be scheduled on ${m.date}.`;
+                }
+            }
+
+            // 3. EXISTING CONSTRAINTS: Daily limits and Rest days
             const matchesOnDay = tempSchedule.filter(x => x.date === m.date);
             const isRound3 = new Date(m.date) >= new Date('2026-06-24');
             const maxMatches = isRound3 ? 6 : 4;
