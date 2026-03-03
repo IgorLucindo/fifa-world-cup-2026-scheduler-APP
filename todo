@@ -1,0 +1,1 @@
+make custom schedule not hard constrained and have a container with a list of violated constraint so users can adjust and make their schedule feasible
