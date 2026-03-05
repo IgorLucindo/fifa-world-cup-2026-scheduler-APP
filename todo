@@ -1,1 +1,3 @@
-make custom schedule not hard constrained and have a container with a list of violated constraint so users can adjust and make their schedule feasible
+- make custom schedule not hard constrained and have a container with a list of violated constraint so users can adjust and make their schedule feasible.
+
+- rule 3 Venue Load (Stadiums must host a balanced number of matches) is not being appied in validateConstraints(). Consider adding it.
