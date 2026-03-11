@@ -51,7 +51,7 @@
     transform: translateX(-50%) translateY(0);
 }
 
-/* Shake Animation for Invalid Drop */
+/* Shake Animation for Invalid Drop & Highlight Triggers */
 @keyframes shake-invalid {
     0%, 100% { transform: translateX(0); }
     10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
@@ -60,10 +60,11 @@
 
 .shake-invalid {
     animation: shake-invalid 0.5s cubic-bezier(.36,.07,.19,.97) both;
-    border-color: #ef4444 !important; /* red-500 */
-    background-color: #fef2f2 !important; /* red-50 */
-    color: #b91c1c !important; /* red-700 */
-    z-index: 60 !important; /* Ensure it stays on top */
+}
+
+/* Match Violations Z-Index Support */
+.match-violation {
+    z-index: 40; 
 }
 
 /* iOS Safari specific fix to prevent text selection while dragging */
@@ -81,7 +82,7 @@
     touch-action: none !important; /* CRITICAL: Prevents scrolling so drag can start */
 }
 
-/* NEW: Ensure touch events hit the draggable container, not the text inside */
+/* Ensure touch events hit the draggable container, not the text inside */
 .match-card * {
     pointer-events: none;
 }
