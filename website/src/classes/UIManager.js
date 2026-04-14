@@ -228,15 +228,6 @@ export class UIManager {
                 const getTeamDisplay = (name) => {
                     const containerClasses = "w-7 h-5 sm:w-10 sm:h-6 flex items-center justify-center overflow-hidden rounded-[3px] border border-black/15 shadow-sm bg-slate-100 mx-auto";
                     
-                    if (name.includes('/')) {
-                        const flagsHtml = name.split('/').map(n => {
-                            const src = this.app.flagSrcs[n.trim()];
-                            if (src) return `<img src="${src}" class="w-full h-full object-cover" alt="${n.trim()}">`;
-                            return `<div class="w-full h-full flex items-center justify-center bg-slate-200"><span class="text-[6px] font-bold text-slate-800">${n.trim().substring(0,2)}</span></div>`;
-                        }).join('');
-                        return `<div class="${containerClasses} grid grid-cols-2 grid-rows-2 gap-[1px]">${flagsHtml}</div>`;
-                    }
-                    
                     const src = this.app.flagSrcs[name.trim()];
                     if (src) {
                         return `<div class="${containerClasses}"><img src="${src}" class="w-full h-full object-cover" alt="${name.trim()}"></div>`;

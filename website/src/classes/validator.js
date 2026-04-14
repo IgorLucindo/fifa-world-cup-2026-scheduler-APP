@@ -60,11 +60,9 @@ export class Validator {
         const teamGroups = {};
         tempSchedule.forEach(m => {
             [m.t1, m.t2].forEach(team => {
-                team.split('/').forEach(t => {
-                    const tTrim = t.trim();
-                    if (!teamGroups[tTrim]) teamGroups[tTrim] = [];
-                    teamGroups[tTrim].push(m);
-                });
+                const tTrim = team.trim();
+                if (!teamGroups[tTrim]) teamGroups[tTrim] = [];
+                teamGroups[tTrim].push(m);
             });
         });
         
