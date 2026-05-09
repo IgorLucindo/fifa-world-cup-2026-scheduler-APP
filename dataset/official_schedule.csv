@@ -1,17 +1,17 @@
 City,2026-06-11,2026-06-12,2026-06-13,2026-06-14,2026-06-15,2026-06-16,2026-06-17,2026-06-18,2026-06-19,2026-06-20,2026-06-21,2026-06-22,2026-06-23,2026-06-24,2026-06-25,2026-06-26,2026-06-27
-Vancouver,,,m6 (D): AUS vs TUR,,,,,m27 (B): CAN vs QAT,,,m40 (G): BEL vs IRN,,,m51 (B): SUI vs CAN,,m64 (G): EGY vs IRN,
-Seattle,,,,,m16 (G): IRN vs NZL,,,,m32 (D): USA vs AUS,,,,,m52 (B): BIH vs QAT,,m63 (G): NZL vs BEL,
+Vancouver,,,m6 (D): AUS vs TUR,,,,,m27 (B): CAN vs QAT,,,m40 (G): NZL vs EGY,,,m51 (B): SUI vs CAN,,m63 (G): NZL vs BEL,
+Seattle,,,,,m16 (G): BEL vs EGY,,,,m32 (D): USA vs AUS,,,,,m52 (B): BIH vs QAT,,m64 (G): EGY vs IRN,
 Santa_Clara,,,m8 (B): QAT vs SUI,,,m20 (J): AUT vs JOR,,,m31 (D): TUR vs PAR,,,m44 (J): JOR vs ALG,,,m60 (D): PAR vs AUS,,
-Inglewood,,m4 (D): USA vs PAR,,,m15 (G): BEL vs EGY,,,m26 (B): SUI vs BIH,,,m39 (G): NZL vs EGY,,,,m59 (D): TUR vs USA,,
-Guadalajara,m2 (A): KOR vs CZE,,,,,,,m28 (A): MEX vs KOR,,,,,m48 (K): COL vs COD,,,m66 (H): CPV vs KSA,
+Inglewood,,m4 (D): USA vs PAR,,,m15 (G): IRN vs NZL,,,m26 (B): SUI vs BIH,,,m39 (G): BEL vs IRN,,,,m59 (D): TUR vs USA,,
+Guadalajara,m2 (A): KOR vs CZE,,,,,,,m28 (A): MEX vs KOR,,,,,m48 (K): COL vs COD,,,m66 (H): URU vs ESP,
 Mexico_City,m1 (A): MEX vs RSA,,,,,,m24 (K): UZB vs COL,,,,,,,m53 (A): CZE vs MEX,,,
 Monterrey,,,,m12 (F): SWE vs TUN,,,,,,m36 (F): TUN vs JPN,,,,m54 (A): RSA vs KOR,,,
-Houston,,,,m10 (E): CIV vs ECU,,,m23 (K): POR vs COD,,,m35 (F): NED vs SWE,,,m47 (K): POR vs UZB,,,m65 (H): URU vs ESP,
-Arlington,,,,m11 (F): NED vs JPN,,,m22 (L): GHA vs PAN,,,,,m43 (J): ARG vs AUT,,,m57 (F): TUN vs NED,,m70 (J): ALG vs AUT
-Kansas_City,,,,,,m19 (J): ARG vs ALG,,,,m34 (E): ECU vs CUW,,,,,m58 (F): JPN vs SWE,,m69 (J): JOR vs ARG
-Atlanta,,,,,m14 (H): KSA vs URU,,,m25 (A): CZE vs RSA,,,m38 (H): URU vs CPV,,,m50 (C): MAR vs HAI,,,m72 (K): COD vs UZB
-Miami_Gardens,,,,,m13 (H): ESP vs CPV,,,,,,m37 (H): ESP vs KSA,,,m49 (C): SCO vs BRA,,,m71 (K): COL vs POR
-Toronto,,m3 (B): CAN vs BIH,,,,,m21 (L): ENG vs CRO,,,m33 (E): GER vs CIV,,,m46 (L): PAN vs CRO,,,m62 (I): SEN vs IRQ,
-Foxborough,,,m5 (C): BRA vs MAR,,,m18 (I): IRQ vs NOR,,,m30 (C): SCO vs MAR,,,,m45 (L): ENG vs GHA,,,m61 (I): NOR vs FRA,
-Philadelphia,,,,m9 (E): GER vs CUW,,,,,m29 (C): BRA vs HAI,,,m42 (I): NOR vs SEN,,,m55 (E): ECU vs GER,,m68 (L): CRO vs GHA
-East_Rutherford,,,m7 (C): HAI vs SCO,,,m17 (I): FRA vs SEN,,,,,,m41 (I): FRA vs IRQ,,,m56 (E): CUW vs CIV,,m67 (L): PAN vs ENG
+Houston,,,,m10 (E): GER vs CUW,,,m23 (K): POR vs COD,,,m35 (F): NED vs SWE,,,m47 (K): POR vs UZB,,,m65 (H): CPV vs KSA,
+Arlington,,,,m11 (F): NED vs JPN,,,m22 (L): ENG vs CRO,,,,,m43 (J): ARG vs AUT,,,m58 (F): JPN vs SWE,,m69 (J): JOR vs ARG
+Kansas_City,,,,,,m19 (J): ARG vs ALG,,,,m34 (E): ECU vs CUW,,,,,m57 (F): TUN vs NED,,m70 (J): ALG vs AUT
+Atlanta,,,,,m14 (H): ESP vs CPV,,,m25 (A): CZE vs RSA,,,m38 (H): ESP vs KSA,,,m50 (C): MAR vs HAI,,,m72 (K): COD vs UZB
+Miami_Gardens,,,,,m13 (H): KSA vs URU,,,,,,m37 (H): URU vs CPV,,,m49 (C): SCO vs BRA,,,m71 (K): COL vs POR
+Toronto,,m3 (B): CAN vs BIH,,,,,m21 (L): GHA vs PAN,,,m33 (E): GER vs CIV,,,m46 (L): PAN vs CRO,,,m62 (I): SEN vs IRQ,
+Foxborough,,,m5 (C): HAI vs SCO,,,m18 (I): IRQ vs NOR,,,m30 (C): SCO vs MAR,,,,m45 (L): ENG vs GHA,,,m61 (I): NOR vs FRA,
+Philadelphia,,,,m9 (E): CIV vs ECU,,,,,m29 (C): BRA vs HAI,,,m42 (I): FRA vs IRQ,,,m55 (E): CUW vs CIV,,m68 (L): CRO vs GHA
+East_Rutherford,,,m7 (C): BRA vs MAR,,,m17 (I): FRA vs SEN,,,,,,m41 (I): NOR vs SEN,,,m56 (E): ECU vs GER,,m67 (L): PAN vs ENG
