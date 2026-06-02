@@ -96,3 +96,201 @@
     transform-origin: center;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* =====================================================================
+   MATCH SPOTLIGHT
+   ===================================================================== */
+
+/* Hover fill — grows from bottom to top over the card content area (placed inside the content div) */
+.match-timer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    background-color: rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+    z-index: 5;
+    opacity: 1;
+    border-radius: inherit;
+}
+.match-timer.hidden {
+    opacity: 0;
+}
+
+/* Full-screen backdrop */
+.match-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    z-index: 200;
+    pointer-events: none;
+    transition: background 0.25s ease;
+}
+.match-overlay.visible {
+    background: rgba(0, 0, 0, 0.3);
+    pointer-events: auto;
+}
+
+/* Spotlight card — all enter/exit animation is driven by JS inline styles.
+   This only defines base position and static properties. */
+.match-spotlight {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 210;
+    width: 300px;
+    visibility: hidden;
+    pointer-events: none;
+    /* Base centering transform — JS overrides this during animation */
+    transform: translate(-50%, -50%);
+}
+.match-spotlight.float-idle {
+    animation: matchFloatIdle 10s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite 0.4s;
+    will-change: transform;
+}
+@keyframes matchFloatIdle {
+    0%   { transform: translate(-50%, 0); }
+    20%  { transform: translate(calc(-50% - 1px), -1.5px); }
+    40%  { transform: translate(calc(-50% + 1.5px), -1px); }
+    60%  { transform: translate(calc(-50% - 0.5px), 1px); }
+    80%  { transform: translate(calc(-50% + 0.5px), -0.5px); }
+    100% { transform: translate(-50%, 0); }
+}
+
+/* Card shell */
+.match-spotlight-inner {
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+/* Colored group header */
+.match-spotlight-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+}
+.match-spotlight-header .group-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+.match-spotlight-header .match-id-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    opacity: 0.4;
+}
+
+/* Teams section — grid keeps both flags in the same fixed column */
+.match-spotlight-body {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    align-items: center;
+    row-gap: 10px;
+    padding: 16px 20px;
+    background: white;
+}
+.match-spotlight-team {
+    display: contents;
+}
+.match-spotlight-flag {
+    /* Fixed 3:2 bounding box — all flags same rendered size regardless of natural aspect ratio */
+    height: 38px;
+    width: 57px;
+    object-fit: contain;
+    display: block;
+    justify-self: center;
+    border-radius: 3px;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25));
+}
+.match-spotlight-flag-placeholder {
+    height: 38px;
+    width: 56px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #64748b;
+}
+.match-spotlight-team-name {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #1e293b;
+    padding-left: 10px;
+}
+.match-spotlight-vs {
+    grid-column: 1 / -1;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 4px 0;
+    border-top: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Divider between body and footer — always visible so card has a clean bottom edge before footer reveals */
+.match-spotlight-divider {
+    height: 1px;
+    background: #e2e8f0;
+}
+
+/* Venue + date footer — starts collapsed; JS adds .revealed after card springs in */
+.match-spotlight-footer {
+    padding: 0 20px;
+    background: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease-out, padding 0.35s ease-out;
+}
+.match-spotlight-footer.revealed {
+    max-height: 200px;
+    padding: 12px 20px 14px;
+}
+.match-spotlight-venue {
+    font-size: 11px;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+.match-spotlight-date {
+    font-size: 13px;
+    font-weight: 400;
+    color: #94a3b8;
+}
+
+/* Mobile adjustments */
+@media screen and (max-width: 480px) {
+    .match-spotlight {
+        width: 250px;
+    }
+    .match-spotlight-body {
+        grid-template-columns: 56px 1fr;
+    }
+    .match-spotlight-team-name {
+        font-size: 15px;
+    }
+    .match-spotlight-flag,
+    .match-spotlight-flag-placeholder {
+        height: 28px;
+        width: 42px;
+    }
+}

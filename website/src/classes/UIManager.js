@@ -1,11 +1,23 @@
-import { CITIES, DATES, GROUPS, REGIONS } from '../data/data.js';
+import { CITIES, DATES, GROUPS, REGIONS, TEAM_NAMES, MATCH_TIMES_UTC } from '../data/data.js';
 import { Calculator } from './calculator.js';
 import { Validator } from './validator.js';
+import { MatchHoverTimer } from './matchHoverTimer.js';
 
 
 export class UIManager {
     constructor(app) {
         this.app = app;
+        this._hoverTimer = null;
+        this._overlay = null;
+        this._spotlight = null;
+        this._footerEl = null;
+        this._spotlightVisible = false;
+        this._hoverMouseOver = null;
+        this._hoverMouseOut = null;
+        this._hoverMouseDown = null;
+        this._activeCardEl = null;
+        this._violationsPanelExpanded = false;
+        this._lastViolations = [];
     }
 
 
@@ -201,6 +213,8 @@ export class UIManager {
             });
             zone.addEventListener('drop', (e) => this.app.dragDrop.handleDrop(e));
         });
+
+        this.createMatchHover();
     }
 
 
@@ -217,7 +231,7 @@ export class UIManager {
                 const isViolated = matchViolations.has(match.id);
                 const borderClass = isViolated ? 'border-[2px] border-red-500 bg-red-50 match-violation' : 'border border-slate-200 bg-white';
                 
-                div.className = `match-card absolute inset-0.5 rounded shadow-sm cursor-move flex overflow-hidden hover:scale-110 hover:shadow-lg hover:z-50 transition-all duration-200 ${borderClass}`;
+                div.className = `match-card absolute inset-0 rounded-[4px] shadow-sm cursor-move flex overflow-hidden transition-all duration-200 ${borderClass}`;
                 
                 // Attach events using dragDrop manager
                 div.draggable = true;
@@ -248,6 +262,7 @@ export class UIManager {
                         <div class="flex-1 w-full flex items-center justify-center min-h-0 overflow-hidden">${t1Html}</div>
                         <div class="text-[7px] sm:text-[12px] text-slate-500 my-[1px]">vs</div>
                         <div class="flex-1 w-full flex items-center justify-center min-h-0 overflow-hidden">${t2Html}</div>
+                        <div class="match-timer"></div>
                     </div>
                 `;
 
@@ -258,21 +273,27 @@ export class UIManager {
 
 
     renderViolationsPanel(violations) {
+        this._lastViolations = violations;
         let panel = document.getElementById('violations-panel');
         if (!panel) {
             panel = document.createElement('div');
             panel.id = 'violations-panel';
-            panel.className = 'hidden fixed bottom-4 right-4 left-4 sm:left-auto sm:w-80 md:w-[400px] bg-white border border-red-200 rounded-lg shadow-2xl z-[100] flex flex-col overflow-hidden transition-opacity duration-200';
+            panel.className = 'hidden fixed right-4 left-4 sm:left-auto sm:w-80 md:w-[400px] bg-white border border-red-200 rounded-lg shadow-2xl z-[100] flex flex-col overflow-hidden';
+            panel.style.bottom = 'calc(env(safe-area-inset-bottom, 0px) + 16px)';
             document.body.appendChild(panel);
         }
 
         if (violations.length === 0) {
             panel.classList.add('hidden');
+            this._violationsPanelExpanded = false;
             return;
         }
 
         panel.classList.remove('hidden');
-        
+
+        const expanded = this._violationsPanelExpanded;
+        const chevronRot = expanded ? 'rotate-180' : 'rotate-0';
+
         const listHtml = violations.map((v) => `
             <li class="cursor-pointer hover:bg-red-50 p-3 border-b border-red-100 last:border-0 text-xs text-red-800 transition-colors flex items-start gap-2.5"
                 onclick="window.app.highlightMatches(${JSON.stringify(v.ids).replace(/"/g, '&quot;')})">
@@ -282,19 +303,27 @@ export class UIManager {
         `).join('');
 
         panel.innerHTML = `
-            <div class="bg-red-500 p-2 sm:p-3 flex justify-between items-center shadow-sm z-10">
+            <div class="bg-red-500 p-2 sm:p-3 flex justify-between items-center cursor-pointer select-none" onclick="window.app.ui.toggleViolationsPanel()">
                 <h4 class="text-white font-bold text-xs sm:text-sm flex items-center gap-2 m-0">
                     <svg class="w-4 h-4 sm:w-5 sm:h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                     Conflicts Detected (${violations.length})
                 </h4>
+                <svg class="w-4 h-4 text-white transition-transform duration-200 ${chevronRot}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </div>
-            <div class="bg-red-50 py-1.5 px-3 text-[10px] text-red-600 font-semibold uppercase tracking-wider border-b border-red-100 z-10">
+            ${expanded ? `
+            <div class="bg-red-50 py-1.5 px-3 text-[10px] text-red-600 font-semibold uppercase tracking-wider border-b border-red-100">
                 Click an item to highlight matches
             </div>
-            <ul class="overflow-y-auto max-h-[25vh] sm:max-h-64 bg-white m-0 p-0 relative">
+            <ul class="overflow-y-auto max-h-[25vh] sm:max-h-64 bg-white m-0 p-0">
                 ${listHtml}
-            </ul>
+            </ul>` : ''}
         `;
+    }
+
+
+    toggleViolationsPanel() {
+        this._violationsPanelExpanded = !this._violationsPanelExpanded;
+        this.renderViolationsPanel(this._lastViolations);
     }
 
 
@@ -311,6 +340,225 @@ export class UIManager {
         });
     }
 
+
+    // ---------------------------------------------------------------
+    //  Match Spotlight
+    // ---------------------------------------------------------------
+
+    createMatchHover() {
+        // Build overlay + card DOM once
+        if (!this._overlay) {
+            const overlay = document.createElement('div');
+            overlay.id = 'match-overlay';
+            overlay.className = 'match-overlay';
+            overlay.addEventListener('click', () => this.hideMatchSpotlight());
+            document.body.appendChild(overlay);
+            this._overlay = overlay;
+
+            const spotlight = document.createElement('div');
+            spotlight.id = 'match-spotlight';
+            spotlight.className = 'match-spotlight';
+            document.body.appendChild(spotlight);
+            this._spotlight = spotlight;
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') this.hideMatchSpotlight();
+            });
+        }
+
+        // Create a fresh timer instance
+        this._hoverTimer = new MatchHoverTimer((match, el) => this.showMatchSpotlight(match, el));
+
+        const gridBody = document.getElementById('grid-body');
+        if (!gridBody) return;
+
+        // Remove stale listeners before attaching new ones
+        if (this._hoverMouseOver)  gridBody.removeEventListener('mouseover',  this._hoverMouseOver);
+        if (this._hoverMouseOut)   gridBody.removeEventListener('mouseout',   this._hoverMouseOut);
+        if (this._hoverMouseDown)  gridBody.removeEventListener('mousedown',  this._hoverMouseDown);
+
+        this._hoverMouseOver = (e) => {
+            if (this._spotlightVisible) return;
+            const card = e.target.closest('.match-card');
+            if (!card) return;
+            const matchId = card.id.replace('match-', '');
+            const match = this.app.scheduleData.find(m => m.id === matchId);
+            if (!match) return;
+            this._hoverTimer.attachToCard(card, match);
+        };
+
+        this._hoverMouseOut = (e) => {
+            if (this._spotlightVisible) return;
+            const card = e.target.closest('.match-card');
+            if (!card) return;
+            this._hoverTimer.reset();
+        };
+
+        this._hoverMouseDown = (e) => {
+            const card = e.target.closest('.match-card');
+            if (!card) return;
+            this._hoverTimer.reset();
+        };
+
+        gridBody.addEventListener('mouseover',  this._hoverMouseOver);
+        gridBody.addEventListener('mouseout',   this._hoverMouseOut);
+        gridBody.addEventListener('mousedown',  this._hoverMouseDown);
+    }
+
+    showMatchSpotlight(match, cardEl) {
+        if (!this._overlay || !this._spotlight) return;
+
+        // --- Group colors ---
+        const groupClasses = GROUPS[match.group] || '';
+        const hexMatch     = groupClasses.match(/#([0-9a-fA-F]{3,6})/);
+        const groupColor   = hexMatch ? `#${hexMatch[1]}` : '#64748b';
+        const textColor    = groupClasses.includes('text-white') ? 'white' : 'black';
+
+        // --- Venue & date ---
+        const cityData  = CITIES[match.city];
+        const venueName = cityData ? cityData.name : match.city.replace(/_/g, ' ');
+
+        const [year, month, day] = match.date.split('-').map(Number);
+        const timeStr  = MATCH_TIMES_UTC[match.id] || '19:00';
+        const [hh, mm] = timeStr.split(':').map(Number);
+        const kickoff  = new Date(Date.UTC(year, month - 1, day, hh, mm));
+
+        const formattedDate = kickoff.toLocaleDateString(navigator.language || 'en-US', {
+            weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+        });
+        const formattedTime = kickoff.toLocaleTimeString(navigator.language || 'en-US', {
+            hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+        });
+
+        // --- Team names + flags ---
+        const getTeamHtml = (code) => {
+            const name = TEAM_NAMES[code.trim()] || code.trim();
+            const src  = this.app.flagSrcs[code.trim()];
+            const flag = src
+                ? `<img src="${src}" class="match-spotlight-flag" alt="${name}">`
+                : `<div class="match-spotlight-flag-placeholder">${code.trim()}</div>`;
+            return { flag, name };
+        };
+        const t1 = getTeamHtml(match.t1);
+        const t2 = getTeamHtml(match.t2);
+
+        this._spotlight.innerHTML = `
+            <div class="match-spotlight-inner">
+                <div class="match-spotlight-header" style="background:${groupColor}; color:${textColor};">
+                    <span class="group-label">GROUP ${match.group}</span>
+                    <span class="match-id-label">${match.id.toUpperCase()}</span>
+                </div>
+                <div class="match-spotlight-body">
+                    <div class="match-spotlight-team">
+                        ${t1.flag}
+                        <span class="match-spotlight-team-name">${t1.name}</span>
+                    </div>
+                    <div class="match-spotlight-vs">VS</div>
+                    <div class="match-spotlight-team">
+                        ${t2.flag}
+                        <span class="match-spotlight-team-name">${t2.name}</span>
+                    </div>
+                </div>
+                <div class="match-spotlight-divider"></div>
+                <div class="match-spotlight-footer">
+                    <span class="match-spotlight-venue">${venueName}</span>
+                    <span class="match-spotlight-date">${formattedDate}</span>
+                    <span class="match-spotlight-date" style="font-size:14px; font-weight:600; color:#475569; margin-top:2px;">${formattedTime}</span>
+                </div>
+            </div>
+        `;
+        this._footerEl = this._spotlight.querySelector('.match-spotlight-footer');
+
+        // --- Animate from card position to screen center ---
+        const cardRect    = cardEl.getBoundingClientRect();
+        const cardCX      = cardRect.left + cardRect.width  / 2;
+        const cardCY      = cardRect.top  + cardRect.height / 2;
+        const offsetX     = cardCX - window.innerWidth  / 2;
+        const offsetY     = cardCY - window.innerHeight / 2;
+
+        // Step 1: place card at match-block origin, invisible, no transition
+        this._activeCardEl = cardEl;
+        this._spotlight.style.transition  = 'none';
+        this._spotlight.style.visibility  = 'visible';
+        this._spotlight.style.pointerEvents = 'auto';
+        this._spotlight.style.transform   =
+            `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px)) scale(0.12) rotate(-6deg)`;
+
+        // Step 2: force reflow so the browser registers the start position
+        void this._spotlight.getBoundingClientRect();
+
+        // Step 3: spring to center
+        this._spotlight.style.transition  = 'transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        this._spotlight.style.transform   = 'translate(-50%, -50%) scale(1) rotate(0deg)';
+
+        this._spotlightVisible = true;
+        this._overlay.classList.add('visible');
+
+        // Step 4: hand off to idle float (card stays centered via translate(-50%,-50%))
+        setTimeout(() => {
+            if (!this._spotlightVisible) return;
+            const rect = this._spotlight.getBoundingClientRect();
+            this._spotlight.style.transition = 'none';
+            this._spotlight.style.top = rect.top + 'px';
+            this._spotlight.style.transform = 'translate(-50%, 0)';
+            void this._spotlight.getBoundingClientRect();
+            this._spotlight.style.transition = '';
+            this._spotlight.classList.add('float-idle');
+        }, 400);
+
+        // Step 5: reveal footer — card stays centered because translate(-50%,-50%)
+        // adjusts automatically as the element grows
+        setTimeout(() => {
+            if (!this._spotlightVisible) return;
+            if (this._footerEl) this._footerEl.classList.add('revealed');
+        }, 500);
+    }
+
+    hideMatchSpotlight() {
+        if (!this._overlay || !this._spotlight) return;
+        this._spotlightVisible = false;
+        this._footerEl = null;
+
+        // Freeze at current visual position to avoid a jump when stopping the animation
+        const spotRect = this._spotlight.getBoundingClientRect();
+        const vpCX = window.innerWidth  / 2;
+        const vpCY = window.innerHeight / 2;
+        const spotCX = spotRect.left + spotRect.width  / 2;
+        const spotCY = spotRect.top  + spotRect.height / 2;
+
+        this._spotlight.classList.remove('float-idle');
+
+        this._spotlight.style.transition = 'none';
+        this._spotlight.style.top = '50%';
+        this._spotlight.style.transform =
+            `translate(calc(-50% + ${spotCX - vpCX}px), calc(-50% + ${spotCY - vpCY}px)) scale(1)`;
+        void this._spotlight.getBoundingClientRect();
+
+        // Animate back to the originating card position
+        let targetTransform = 'translate(-50%, -50%) scale(0.08) rotate(4deg)';
+        if (this._activeCardEl) {
+            const cardRect = this._activeCardEl.getBoundingClientRect();
+            const cardCX   = cardRect.left + cardRect.width  / 2;
+            const cardCY   = cardRect.top  + cardRect.height / 2;
+            targetTransform =
+                `translate(calc(-50% + ${cardCX - vpCX}px), calc(-50% + ${cardCY - vpCY}px)) scale(0.08) rotate(6deg)`;
+        }
+
+        this._spotlight.style.transition = 'transform 0.22s cubic-bezier(0.55, 0.055, 0.675, 0.19)';
+        this._spotlight.style.transform  = targetTransform;
+
+        setTimeout(() => {
+            this._spotlight.style.visibility    = 'hidden';
+            this._spotlight.style.top           = '';
+            this._spotlight.style.transition    = '';
+            this._spotlight.style.transform     = '';
+            this._spotlight.style.pointerEvents = '';
+            this._activeCardEl = null;
+        }, 220);
+
+        this._overlay.classList.remove('visible');
+        if (this._hoverTimer) this._hoverTimer.reset();
+    }
 
     renderLegend() {
         const legendDesktop = document.getElementById('legend');

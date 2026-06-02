@@ -73,3 +73,70 @@ export const FLAG_CODES = {
 export const FLAG_CUSTOM_SRCS = {
     'IRN': 'website/assets/images/flags/iran.svg'
 };
+
+// Full country names keyed by FIFA 3-letter code
+export const TEAM_NAMES = {
+    'ALB': 'Albania',       'ALG': 'Algeria',       'ARG': 'Argentina',
+    'AUS': 'Australia',     'AUT': 'Austria',       'BEL': 'Belgium',
+    'BIH': 'Bosnia & Herz.','BOL': 'Bolivia',       'BRA': 'Brazil',
+    'CAN': 'Canada',        'CIV': 'Ivory Coast',   'COD': 'DR Congo',
+    'COL': 'Colombia',      'CPV': 'Cape Verde',    'CRC': 'Costa Rica',
+    'CRO': 'Croatia',       'CUW': 'Curaçao',       'CZE': 'Czech Republic',
+    'DEN': 'Denmark',       'ECU': 'Ecuador',       'EGY': 'Egypt',
+    'ENG': 'England',       'ESP': 'Spain',         'FRA': 'France',
+    'GER': 'Germany',       'GHA': 'Ghana',         'HAI': 'Haiti',
+    'IRL': 'Ireland',       'IRN': 'Iran',          'IRQ': 'Iraq',
+    'ITA': 'Italy',         'JAM': 'Jamaica',       'JOR': 'Jordan',
+    'JPN': 'Japan',         'KDR': 'North Korea',   'KOR': 'South Korea',
+    'KOS': 'Kosovo',        'KSA': 'Saudi Arabia',  'MAR': 'Morocco',
+    'MEX': 'Mexico',        'MKD': 'N. Macedonia',  'NCL': 'New Caledonia',
+    'NED': 'Netherlands',   'NIR': 'N. Ireland',    'NOR': 'Norway',
+    'NZL': 'New Zealand',   'PAN': 'Panama',        'PAR': 'Paraguay',
+    'POL': 'Poland',        'POR': 'Portugal',      'QAT': 'Qatar',
+    'ROU': 'Romania',       'RSA': 'South Africa',  'SCO': 'Scotland',
+    'SEN': 'Senegal',       'SVK': 'Slovakia',      'SOL': 'Solomon Islands',
+    'SUI': 'Switzerland',   'SUR': 'Suriname',      'SWE': 'Sweden',
+    'TUN': 'Tunisia',       'TUR': 'Turkey',        'UKR': 'Ukraine',
+    'URU': 'Uruguay',       'USA': 'United States', 'UZB': 'Uzbekistan',
+    'WAL': 'Wales',
+};
+
+// Official kick-off times (UTC HH:MM) for each match, keyed by match ID.
+// Based on the official FIFA 2026 Group Stage schedule.
+// Jun 11-12: 2 matches/day. Jun 13-23: 4 matches/day. Jun 24-27: 6 matches/day (simultaneous pairs).
+export const MATCH_TIMES_UTC = {
+    // Jun 11
+    'm1': '19:00', 'm2': '22:00',
+    // Jun 12
+    'm3': '19:00', 'm4': '22:00',
+    // Jun 13
+    'm5': '16:00', 'm6': '16:00', 'm7': '19:00', 'm8': '22:00',
+    // Jun 14
+    'm9': '16:00', 'm10': '16:00', 'm11': '19:00', 'm12': '22:00',
+    // Jun 15
+    'm13': '16:00', 'm14': '16:00', 'm15': '19:00', 'm16': '22:00',
+    // Jun 16
+    'm17': '16:00', 'm18': '16:00', 'm19': '19:00', 'm20': '22:00',
+    // Jun 17
+    'm21': '16:00', 'm22': '16:00', 'm23': '19:00', 'm24': '22:00',
+    // Jun 18
+    'm25': '16:00', 'm26': '16:00', 'm27': '19:00', 'm28': '22:00',
+    // Jun 19
+    'm29': '16:00', 'm30': '16:00', 'm31': '19:00', 'm32': '22:00',
+    // Jun 20
+    'm33': '16:00', 'm34': '16:00', 'm35': '19:00', 'm36': '22:00',
+    // Jun 21
+    'm37': '16:00', 'm38': '16:00', 'm39': '19:00', 'm40': '22:00',
+    // Jun 22
+    'm41': '16:00', 'm42': '16:00', 'm43': '19:00', 'm44': '22:00',
+    // Jun 23
+    'm45': '16:00', 'm46': '16:00', 'm47': '19:00', 'm48': '22:00',
+    // Jun 24 – simultaneous pairs (last matches of groups A-D)
+    'm49': '16:00', 'm50': '16:00', 'm51': '18:00', 'm52': '18:00', 'm53': '22:00', 'm54': '22:00',
+    // Jun 25 – simultaneous pairs (groups E-H)
+    'm55': '16:00', 'm56': '16:00', 'm57': '18:00', 'm58': '18:00', 'm59': '22:00', 'm60': '22:00',
+    // Jun 26 – simultaneous pairs (groups I-L first)
+    'm61': '16:00', 'm62': '16:00', 'm63': '19:00', 'm64': '19:00', 'm65': '22:00', 'm66': '22:00',
+    // Jun 27 – simultaneous pairs (groups I-L last)
+    'm67': '16:00', 'm68': '16:00', 'm69': '19:00', 'm70': '19:00', 'm71': '22:00', 'm72': '22:00',
+};

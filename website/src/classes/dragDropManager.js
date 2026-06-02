@@ -4,6 +4,9 @@ export class DragDropManager {
         this.draggedMatch = null;
         this.ghostEl = null;
         this.activeDragEl = null;
+        this._touchStartX = 0;
+        this._touchStartY = 0;
+        this._touchMoved = false;
         
         this._touchMoveHandler = (ev) => this.handleTouchMove(ev);
         this._touchEndHandler = (ev) => this.handleTouchEnd(ev);
@@ -39,6 +42,9 @@ export class DragDropManager {
 
         this.draggedMatch = match;
         const touch = e.touches[0];
+        this._touchStartX = touch.clientX;
+        this._touchStartY = touch.clientY;
+        this._touchMoved = false;
 
         this.ghostEl = originalEl.cloneNode(true);
         this.ghostEl.style.position = 'fixed';
@@ -63,6 +69,14 @@ export class DragDropManager {
     handleTouchMove(e) {
         if (e.cancelable) e.preventDefault(); 
         const touch = e.touches[0];
+
+        // Detect drag intent — more than 8px movement means it's a drag, not a tap
+        const dx = touch.clientX - this._touchStartX;
+        const dy = touch.clientY - this._touchStartY;
+        if (!this._touchMoved && Math.sqrt(dx * dx + dy * dy) > 8) {
+            this._touchMoved = true;
+        }
+
         this.updateGhostPosition(touch);
 
         const target = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -77,6 +91,10 @@ export class DragDropManager {
         document.removeEventListener('touchmove', this._touchMoveHandler);
         document.removeEventListener('touchend', this._touchEndHandler);
 
+        // Capture before cleanup
+        const match  = this.draggedMatch;
+        const cardEl = this.activeDragEl;
+
         if (this.ghostEl) {
             this.ghostEl.remove();
             this.ghostEl = null;
@@ -87,11 +105,18 @@ export class DragDropManager {
             this.activeDragEl = null;
         }
 
-        const touch = e.changedTouches[0];
-        const target = document.elementFromPoint(touch.clientX, touch.clientY);
-        const zone = target ? target.closest('.drop-zone') : null;
-
         document.querySelectorAll('.drop-zone.drag-over').forEach(el => el.classList.remove('drag-over'));
+
+        // Tap (no significant movement) → open match spotlight instead of dropping
+        if (!this._touchMoved && match && cardEl) {
+            this.draggedMatch = null;
+            this.app.ui.showMatchSpotlight(match, cardEl);
+            return;
+        }
+
+        const touch  = e.changedTouches[0];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        const zone   = target ? target.closest('.drop-zone') : null;
 
         if (zone) {
             this.processCustomDrop(zone);
