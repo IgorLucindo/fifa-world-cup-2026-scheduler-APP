@@ -424,7 +424,8 @@ export class UIManager {
         const kickoff  = new Date(Date.UTC(year, month - 1, day, hh, mm));
 
         const formattedDate = kickoff.toLocaleDateString(navigator.language || 'en-US', {
-            weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+            weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
+            timeZone: 'UTC'
         });
         const formattedTime = kickoff.toLocaleTimeString(navigator.language || 'en-US', {
             hour: '2-digit', minute: '2-digit', timeZoneName: 'short'

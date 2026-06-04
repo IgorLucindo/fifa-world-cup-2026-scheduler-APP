@@ -107,15 +107,15 @@ export const TEAM_NAMES = {
 export const MATCH_TIMES_UTC = {
     // Jun 11
     'm1': '19:00', 
-    'm2': '02:00', // ⚠️ Next Day UTC (KOR vs CZE)
+    'm2': '02:00', // ⚠️ Next Day UTC
 
     // Jun 12
     'm3': '19:00', 
-    'm4': '01:00', // ⚠️ Next Day UTC (USA vs PAR)
+    'm4': '01:00', // ⚠️ Next Day UTC
 
     // Jun 13
-    'm5': '01:00', // ⚠️ Next Day UTC (HAI vs SCO)
-    'm6': '04:00', // ⚠️ Next Day UTC (AUS vs TUR)
+    'm5': '01:00', // ⚠️ Next Day UTC
+    'm6': '04:00', // ⚠️ Next Day UTC
     'm7': '22:00', 
     'm8': '19:00', 
 
@@ -123,91 +123,91 @@ export const MATCH_TIMES_UTC = {
     'm9': '23:00', 
     'm10': '17:00', 
     'm11': '20:00', 
-    'm12': '02:00', // ⚠️ Next Day UTC (SWE vs TUN)
+    'm12': '02:00', // ⚠️ Next Day UTC
 
     // Jun 15
     'm13': '22:00', 
     'm14': '16:00', 
-    'm15': '01:00', // ⚠️ Next Day UTC (IRN vs NZL)
+    'm15': '01:00', // ⚠️ Next Day UTC
     'm16': '19:00', 
 
     // Jun 16
     'm17': '19:00', 
     'm18': '22:00', 
-    'm19': '01:00', // ⚠️ Next Day UTC (ARG vs ALG)
-    'm20': '04:00', // ⚠️ Next Day UTC (AUT vs JOR)
+    'm19': '01:00', // ⚠️ Next Day UTC
+    'm20': '04:00', // ⚠️ Next Day UTC
 
     // Jun 17
     'm21': '23:00', 
     'm22': '20:00', 
     'm23': '17:00', 
-    'm24': '02:00', // ⚠️ Next Day UTC (UZB vs COL)
+    'm24': '02:00', // ⚠️ Next Day UTC
 
     // Jun 18
     'm25': '16:00', 
     'm26': '19:00', 
     'm27': '22:00', 
-    'm28': '01:00', // ⚠️ Next Day UTC (MEX vs KOR)
+    'm28': '01:00', // ⚠️ Next Day UTC
 
     // Jun 19
-    'm29': '01:00', // ⚠️ Next Day UTC (BRA vs HAI)
+    'm29': '00:30', // ⚠️ Next Day UTC
     'm30': '22:00', 
-    'm31': '03:00', // ⚠️ Next Day UTC (TUR vs PAR)
+    'm31': '03:00', // ⚠️ Next Day UTC
     'm32': '19:00', 
 
     // Jun 20
     'm33': '20:00', 
-    'm34': '00:00', // ⚠️ Next Day UTC (ECU vs CUR)
+    'm34': '00:00', // ⚠️ Next Day UTC
     'm35': '17:00', 
-    'm36': '04:00', // ⚠️ Next Day UTC (TUN vs JPN)
+    'm36': '04:00', // ⚠️ Next Day UTC
 
     // Jun 21
     'm37': '22:00', 
     'm38': '16:00', 
     'm39': '19:00', 
-    'm40': '01:00', // ⚠️ Next Day UTC (NZL vs EGY)
+    'm40': '01:00', // ⚠️ Next Day UTC
 
     // Jun 22
-    'm41': '00:00', // ⚠️ Next Day UTC (NOR vs SEN)
+    'm41': '00:00', // ⚠️ Next Day UTC
     'm42': '21:00', 
     'm43': '17:00', 
-    'm44': '03:00', // ⚠️ Next Day UTC (JOR vs ALG)
+    'm44': '03:00', // ⚠️ Next Day UTC
 
     // Jun 23
     'm45': '20:00', 
     'm46': '23:00', 
     'm47': '17:00', 
-    'm48': '02:00', // ⚠️ Next Day UTC (COL vs COD)
+    'm48': '02:00', // ⚠️ Next Day UTC
 
     // Jun 24 – simultaneous pairs 
     'm49': '22:00', 
     'm50': '22:00', 
     'm51': '19:00', 
     'm52': '19:00', 
-    'm53': '01:00', // ⚠️ Next Day UTC (CZE vs MEX)
-    'm54': '01:00', // ⚠️ Next Day UTC (RSA vs KOR)
+    'm53': '01:00', // ⚠️ Next Day UTC
+    'm54': '01:00', // ⚠️ Next Day UTC
 
     // Jun 25 – simultaneous pairs
     'm55': '20:00', 
     'm56': '20:00', 
     'm57': '23:00', 
     'm58': '23:00', 
-    'm59': '02:00', // ⚠️ Next Day UTC (TUR vs USA)
-    'm60': '02:00', // ⚠️ Next Day UTC (PAR vs AUS)
+    'm59': '02:00', // ⚠️ Next Day UTC
+    'm60': '02:00', // ⚠️ Next Day UTC
 
     // Jun 26 – simultaneous pairs 
     'm61': '19:00', 
     'm62': '19:00', 
-    'm63': '00:00', // ⚠️ Next Day UTC (CPV vs KSA)
-    'm64': '00:00', // ⚠️ Next Day UTC (URU vs ESP)
-    'm65': '03:00', // ⚠️ Next Day UTC (NZL vs BEL)
-    'm66': '03:00', // ⚠️ Next Day UTC (EGY vs IRN)
+    'm63': '03:00', // ⚠️ Next Day UTC
+    'm64': '03:00', // ⚠️ Next Day UTC
+    'm65': '00:00', // ⚠️ Next Day UTC
+    'm66': '00:00', // ⚠️ Next Day UTC
 
     // Jun 27 – simultaneous pairs
     'm67': '21:00', 
     'm68': '21:00', 
-    'm69': '23:30', 
-    'm70': '23:30', 
-    'm71': '02:00', // ⚠️ Next Day UTC (ALG vs AUT)
-    'm72': '02:00', // ⚠️ Next Day UTC (JOR vs ARG)
+    'm69': '02:00', // ⚠️ Next Day UTC
+    'm70': '02:00', // ⚠️ Next Day UTC
+    'm71': '23:30',
+    'm72': '23:30',
 };
