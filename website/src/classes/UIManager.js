@@ -1,4 +1,4 @@
-import { CITIES, DATES, GROUPS, REGIONS, TEAM_NAMES, MATCH_TIMES_UTC } from '../data/data.js';
+import { CITIES, DATES, GROUPS, REGIONS, TEAM_NAMES, MATCH_TIMES_UTC, MATCH_SCORES } from '../data/data.js';
 import { Calculator } from './calculator.js';
 import { Validator } from './validator.js';
 import { MatchHoverTimer } from './matchHoverTimer.js';
@@ -443,6 +443,16 @@ export class UIManager {
         const t1 = getTeamHtml(match.t1);
         const t2 = getTeamHtml(match.t2);
 
+        const score = MATCH_SCORES[match.id];
+        const vsOrScore = score
+            ? `<div class="match-spotlight-score">
+                    <span class="score-number">${score.t1}</span>
+                    <span class="score-dash">–</span>
+                    <span class="score-number">${score.t2}</span>
+               </div>
+               <div class="match-spotlight-ft">FT</div>`
+            : `<div class="match-spotlight-vs">VS</div>`;
+
         this._spotlight.innerHTML = `
             <div class="match-spotlight-inner">
                 <div class="match-spotlight-header" style="background:${groupColor}; color:${textColor};">
@@ -454,7 +464,9 @@ export class UIManager {
                         ${t1.flag}
                         <span class="match-spotlight-team-name">${t1.name}</span>
                     </div>
-                    <div class="match-spotlight-vs">VS</div>
+                    <div class="match-spotlight-center">
+                        ${vsOrScore}
+                    </div>
                     <div class="match-spotlight-team">
                         ${t2.flag}
                         <span class="match-spotlight-team-name">${t2.name}</span>

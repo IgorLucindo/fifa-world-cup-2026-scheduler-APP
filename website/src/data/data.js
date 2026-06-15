@@ -211,3 +211,27 @@ export const MATCH_TIMES_UTC = {
     'm71': '23:30',
     'm72': '23:30',
 };
+
+// Final scores for completed matches. t1/t2 correspond to the home/away teams listed in the schedule.
+// Update this object as matches are played. Leave entries absent for upcoming matches.
+export const MATCH_SCORES = {
+    // Jun 11 – Matchday 1, Groups A
+    'm1': { t1: 2, t2: 0 },  // MEX 2–0 RSA
+    'm2': { t1: 2, t2: 1 },  // KOR 2–1 CZE
+
+    // Jun 12 – Matchday 1, Groups B & D
+    'm3': { t1: 1, t2: 1 },  // CAN 1–1 BIH
+    'm4': { t1: 4, t2: 1 },  // USA 4–1 PAR
+
+    // Jun 13 – Matchday 1, Groups B, C & D
+    'm5': { t1: 0, t2: 1 },  // HAI 0–1 SCO
+    'm6': { t1: 2, t2: 0 },  // AUS 2–0 TUR
+    'm7': { t1: 1, t2: 1 },  // BRA 1–1 MAR
+    'm8': { t1: 1, t2: 1 },  // QAT 1–1 SUI
+
+    // Jun 14 – Matchday 1, Groups E & F
+    'm9':  { t1: 1, t2: 0 }, // CIV 1–0 ECU
+    'm10': { t1: 7, t2: 1 }, // GER 7–1 CUW
+    'm11': { t1: 2, t2: 2 }, // NED 2–2 JPN
+    'm12': { t1: 5, t2: 1 }, // SWE 5–1 TUN
+};

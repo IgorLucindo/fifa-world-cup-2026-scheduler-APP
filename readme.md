@@ -2,17 +2,19 @@
 
 [![Open App](https://img.shields.io/badge/OPEN_APP-World_Cup_Scheduler-2ea44f?style=for-the-badge)](https://igorlucindo.github.io/fifa-world-cup-2026-scheduler-APP/)
 
-A web application that optimizes and visualizes the **FIFA World Cup 2026** match schedule. It compares the official schedule against a **Mixed Integer Programming (MIP)** model designed to minimize team travel distance and maximize efficiency.
+A web application that optimizes and visualizes the **FIFA World Cup 2026** match schedule. This interactive tool was built to accompany our research on applying operations research to mitigate team travel fatigue during the tournament.
 
-The application features an interactive interface that allows users to drag and drop matches to build their own custom schedule while validating logical constraints.
+**📄 Associated Publication**
+> **[Sport scheduling to minimize travels at the FIFA World Cup 2026](https://doi.org/10.1007/s11590-026-02320-x)**     
+> Rogelio Gutierrez, Igor Cardoso, and Hamidreza Validi  
 
 ## ✨ Features
 
-* Visualizes the full tournament grid across **16 host cities** and **3 regions**.
-* Compares the **Official Schedule** vs. an **Optimized MIP Schedule**.
-* Calculates real-time **travel distance** (km/mi) and efficiency metrics.
-* Interactive **Drag & Drop** interface for custom scheduling.
-* Validates constraints such as **stadium turnaround** and **team rest days**.
+* **Compare Schedules:** Evaluate the Official FIFA schedule side-by-side against our Optimized Mixed Integer Programming (MIP) schedule.
+* **Visualize the Grid:** Explore the full tournament layout across all 16 host cities and 3 geographic regions.
+* **Calculate Logistics:** Track real-time travel distance (km/mi) and efficiency metrics as the schedule changes.
+* **Build Your Own:** Use the interactive drag-and-drop interface to create custom group-stage match placements.
+* **Validate Constraints:** Automatically check scheduling logic, including stadium turnaround times and mandatory team rest days.
 
 ## 💾 Dataset
 
