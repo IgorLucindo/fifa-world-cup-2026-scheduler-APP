@@ -234,4 +234,58 @@ export const MATCH_SCORES = {
     'm10': { t1: 7, t2: 1 }, // GER 7–1 CUW
     'm11': { t1: 2, t2: 2 }, // NED 2–2 JPN
     'm12': { t1: 5, t2: 1 }, // SWE 5–1 TUN
+
+    // Jun 15 – Matchday 1, Groups G & H
+    'm13': { t1: 0, t2: 0 }, // ESP 0–0 CPV
+    'm14': { t1: 1, t2: 1 }, // KSA 1–1 URU
+    'm15': { t1: 1, t2: 1 }, // BEL 1–1 EGY
+    'm16': { t1: 2, t2: 2 }, // IRN 2–2 NZL
+
+    // Jun 16 – Matchday 1, Groups I & J
+    'm17': { t1: 3, t2: 1 }, // FRA 3–1 SEN
+    'm18': { t1: 1, t2: 4 }, // IRQ 1–4 NOR
+    'm19': { t1: 3, t2: 0 }, // ARG 3–0 ALG
+    'm20': { t1: 3, t2: 1 }, // AUT 3–1 JOR
+
+    // Jun 17 – Matchday 1, Groups K & L
+    'm21': { t1: 4, t2: 2 }, // ENG 4–2 CRO
+    'm22': { t1: 1, t2: 0 }, // GHA 1–0 PAN
+    'm23': { t1: 1, t2: 1 }, // POR 1–1 COD
+    'm24': { t1: 1, t2: 3 }, // UZB 1–3 COL
+
+    // Jun 18 – Matchday 2, Groups A & B
+    'm25': { t1: 1, t2: 1 }, // RSA 1–1 CZE (Czechia 1–1 South Africa)
+    'm26': { t1: 1, t2: 0 }, // MEX 1–0 KOR (Mexico 1–0 Korea Republic)
+    'm27': { t1: 6, t2: 0 }, // CAN 6–0 QAT (Canada 6–0 Qatar)
+    'm28': { t1: 1, t2: 4 }, // BIH 1–4 SUI (Switzerland 4–1 Bosnia and Herzegovina)
+
+    // Jun 19 – Matchday 2, Groups C & D
+    'm29': { t1: 3, t2: 0 }, // BRA 3–0 HAI
+    'm30': { t1: 1, t2: 0 }, // MAR 1–0 SCO (Scotland 0–1 Morocco)
+    'm31': { t1: 1, t2: 0 }, // PAR 1–0 TUR (Türkiye 0–1 Paraguay)
+    'm32': { t1: 2, t2: 0 }, // USA 2–0 AUS
+
+    // Jun 20 – Matchday 2, Groups E & F
+    'm33': { t1: 2, t2: 1 }, // GER 2–1 CIV
+    'm34': { t1: 0, t2: 0 }, // CUW 0–0 ECU (Ecuador 0–0 Curaçao)
+    'm35': { t1: 5, t2: 1 }, // NED 5–1 SWE
+    'm36': { t1: 0, t2: 4 }, // JPN vs TUN (Tunisia 0–4 Japan)
+
+    // Jun 21 – Matchday 2, Groups G & H
+    'm37': { t1: 4, t2: 0 }, // ESP 4–0 KSA
+    'm38': { t1: 2, t2: 2 }, // CPV 2–2 URU (Uruguay 2–2 Cabo Verde)
+    'm39': { t1: 0, t2: 0 }, // BEL 0–0 IRN
+    'm40': { t1: 3, t2: 1 }, // EGY 3–1 NZL (New Zealand 1–3 Egypt)
+
+    // Jun 22 – Matchday 2, Groups I & J
+    'm41': { t1: 3, t2: 0 }, // FRA 3–0 IRQ
+    'm42': { t1: 2, t2: 3 }, // SEN 2–3 NOR (Norway 3–2 Senegal)
+    'm43': { t1: 2, t2: 0 }, // ARG 2–0 AUT
+    'm44': { t1: 2, t2: 1 }, // ALG 2–1 JOR (Jordan 1–2 Algeria)
+
+    // Jun 23 – Matchday 2, Groups K & L
+    'm45': { t1: 0, t2: 0 }, // ENG 0–0 GHA
+    'm46': { t1: 1, t2: 0 }, // CRO 1–0 PAN (Panama 0–1 Croatia)
+    'm47': { t1: 5, t2: 0 }, // POR 5–0 UZB
+    'm48': { t1: 0, t2: 1 }, // COD 0–1 COL (Colombia 1–0 Congo DR)
 };
